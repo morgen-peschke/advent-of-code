@@ -1,8 +1,9 @@
-package com.peschke.advent_of_code
+package com.peschke.advent_of_code.day3
 
 import scala.util.{Failure, Try}
 
-import AdventOfCodeDay._
+import com.peschke.advent_of_code.AdventOfCodeDay
+import com.peschke.advent_of_code.AdventOfCodeDay._
 
 /**
   * http://adventofcode.com/2017/day/3
@@ -41,7 +42,7 @@ import AdventOfCodeDay._
   * How many steps are required to carry the data from the square
   * identified in your puzzle input all the way to the access port?
   */
-object Day3SpiralMemory extends AdventOfCodeDay[Int] {
+object SpiralMemory extends AdventOfCodeDay[Int] {
 
   class SpiralMemoryFailure(input: String, cause: Throwable)
       extends IllegalArgumentException(s"Day3SpiralMemory failed on input:\n$input", cause)

@@ -2,6 +2,10 @@ package com.peschke.advent_of_code
 
 import scopt.OptionParser
 
+import com.peschke.advent_of_code.day1.InverseCaptcha
+import com.peschke.advent_of_code.day2.CorruptionChecksum
+import com.peschke.advent_of_code.day3.SpiralMemory
+
 object AdventOfCodeOpts {
   sealed trait DayOpts {
     val verifySamples: Boolean
@@ -140,14 +144,14 @@ object AdventOfCode extends App {
     .foreach {
       case NoDayChosen => throw new IllegalStateException("Should never reach this line of code")
       case InverseCaptchaOpts(inputOpt, verifySamples) =>
-        processInputOrSamples(Day1InverseCaptcha, inputOpt, verifySamples)
+        processInputOrSamples(InverseCaptcha, inputOpt, verifySamples)
 
       case CorruptionChecksumOpts(inputOpt, verifySamples) => {
-        processInputOrSamples(Day2CorruptionChecksum, inputOpt, verifySamples)
+        processInputOrSamples(CorruptionChecksum, inputOpt, verifySamples)
       }
 
       case SpiralMemoryOpts(inputOpt, verifySamples) => {
-        processInputOrSamples(Day3SpiralMemory, inputOpt, verifySamples)
+        processInputOrSamples(SpiralMemory, inputOpt, verifySamples)
       }
     }
 }

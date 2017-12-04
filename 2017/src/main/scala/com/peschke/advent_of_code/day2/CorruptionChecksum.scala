@@ -1,8 +1,9 @@
-package com.peschke.advent_of_code
+package com.peschke.advent_of_code.day2
 
 import scala.util.{Try, Failure}
 
-import AdventOfCodeDay._
+import com.peschke.advent_of_code.AdventOfCodeDay
+import com.peschke.advent_of_code.AdventOfCodeDay._
 
 /**
   * http://adventofcode.com/2017/day/2
@@ -64,7 +65,7 @@ import AdventOfCodeDay._
   * - In the third row, the result is 2.
   * - In this example, the sum of the results would be 4 + 3 + 2 = 9.
   */
-object Day2CorruptionChecksum extends AdventOfCodeDay[Int] {
+object CorruptionChecksum extends AdventOfCodeDay[Int] {
 
   class CorruptionChecksumFailure(input: String, cause: Throwable)
       extends IllegalStateException(s"Day2CorruptionChecksum failed on input:\n$input", cause)

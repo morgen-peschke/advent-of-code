@@ -1,8 +1,9 @@
-package com.peschke.advent_of_code
+package com.peschke.advent_of_code.day1
 
 import scala.util.{Failure, Try}
 
-import AdventOfCodeDay._
+import com.peschke.advent_of_code.AdventOfCodeDay
+import com.peschke.advent_of_code.AdventOfCodeDay._
 
 /**
   * http://adventofcode.com/2017/day/1
@@ -59,7 +60,7 @@ import AdventOfCodeDay._
   * - 123123 produces 12.
   * - 12131415 produces 4.
   */
-object Day1InverseCaptcha extends AdventOfCodeDay[Int]{
+object InverseCaptcha extends AdventOfCodeDay[Int]{
 
   class InverseCaptchaFailure(input: String, cause: Throwable)
       extends IllegalArgumentException(s"Day1InverseCaptcha failed on input:\n$input", cause)
