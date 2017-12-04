@@ -50,7 +50,11 @@ object Day3SpiralMemory extends AdventOfCodeDay[Int] {
     override def toString: String = s"$n steps"
 
     def + (other: Steps): Steps = Steps(this.n + other.n)
+    def + (delta: Int): Steps = Steps(this.n + delta)
+
     def - (other: Steps): Steps = Steps(this.n - other.n)
+
+    def unary_- : Steps = Steps(-this.n)
 
     def abs: Steps = Steps(n.abs)
   }
@@ -101,10 +105,8 @@ object Day3SpiralMemory extends AdventOfCodeDay[Int] {
   }
 
   sealed trait Direction
-  case object Up extends Direction
-  case object Down extends Direction
-  case object Left extends Direction
-  case object Right extends Direction
+  case object Horizontal extends Direction
+  case object Vertical extends Direction
 
   sealed trait Corner {
     def square: Square
@@ -116,47 +118,26 @@ object Day3SpiralMemory extends AdventOfCodeDay[Int] {
     case class UpperRight(val square: Square) extends Corner
   }
 
-  case class Offset(steps: Map[Direction, Steps]) {
-    def going(d: Direction): Steps = steps.getOrElse(d, Steps(0))
+  case class Offset(vertical: Steps = Steps(0), horizontal: Steps = Steps(0)) {
+    def - (other: Offset): Offset =
+      Offset(
+        vertical = this.vertical - other.vertical,
+        horizontal = this.horizontal - other.horizontal
+      )
 
-    def upDown: Option[(Direction, Steps)] =
-      (this.going(Up) - this.going(Down)) match {
-        case Steps(0) => None
-        case s @ Steps(n) if n < 0 => Some(Down -> s.abs)
-        case s => Some(Up -> s.abs)
-      }
-
-    def leftRight: Option[(Direction, Steps)] =
-      (this.going(Right) - this.going(Left)) match {
-        case Steps(0) => None
-        case s @ Steps(n) if n < 0 => Some(Left -> s.abs)
-        case s => Some(Right -> s.abs)
-      }
-
-
-    def merge(other: Offset): Offset = {
-      val merged =
-        Offset {
-          Seq(Up, Down, Left, Right)
-            .map { d =>
-              d -> (this.steps.getOrElse(d, Steps(0)) - other.steps.getOrElse(d, Steps(0)))
-            }
-            .toMap
-        }
-      Offset(Seq(merged.upDown, merged.leftRight).flatten.toMap)
-    }
+    def distance: Steps = vertical.abs + horizontal.abs
   }
 
   case class Anchor(corner: Corner, offsetFromPort: Offset) {
     def continue(n: Steps): Offset = {
       val extraOffset =
-        Offset(corner match {
-          case Corner.UpperLeft(_) => Map(Down -> n)
-          case Corner.LowerLeft(_) => Map(Right -> n)
-          case Corner.LowerRight(_) => Map(Up -> n)
-          case Corner.UpperRight(_) => Map(Left -> n)
-        })
-      offsetFromPort merge extraOffset
+        corner match {
+          case Corner.UpperLeft(_) => Offset(vertical = -n)
+          case Corner.LowerLeft(_) => Offset(horizontal = n)
+          case Corner.LowerRight(_) => Offset(vertical = n)
+          case Corner.UpperRight(_) => Offset(horizontal = -n)
+        }
+      offsetFromPort - extraOffset
     }
   }
 
@@ -168,7 +149,7 @@ object Day3SpiralMemory extends AdventOfCodeDay[Int] {
     ).map(_(input))
 
   def previousAnchor(square: Square): Anchor =
-    if (square.id == 0) Anchor(Corner.LowerLeft(square), Offset(Map.empty))
+    if (square.id == 0) Anchor(Corner.LowerLeft(square), Offset())
     else {
       val level = square.toLevel
 
@@ -182,24 +163,25 @@ object Day3SpiralMemory extends AdventOfCodeDay[Int] {
         else
           Corner.UpperRight(level.copy(remainder = 0.75).toSquare)
 
-      val offset = Offset(corner match {
+      val steps = Steps(level.n)
+      val offset = corner match {
         case Corner.UpperLeft(_) =>
-          Map(
-            Down -> Steps(level.n),
-            Right -> Steps(level.n))
+          Offset(
+            vertical = -steps,
+            horizontal = steps)
         case Corner.LowerLeft(_) =>
-          Map(
-            Up -> Steps(level.n),
-            Right -> Steps(level.n))
+          Offset(
+            vertical = steps,
+            horizontal = steps)
         case Corner.LowerRight(_) =>
-          Map(
-            Up -> Steps(level.n),
-            Left -> Steps(level.n + 1))
+          Offset(
+            vertical = steps,
+            horizontal = steps + 1)
         case Corner.UpperRight(_) =>
-          Map(
-            Down -> Steps(level.n),
-            Left -> Steps(level.n))
-      })
+          Offset(
+            vertical = -steps,
+            horizontal = -steps)
+      }
       Anchor(corner, offset)
     }
 
@@ -210,7 +192,7 @@ object Day3SpiralMemory extends AdventOfCodeDay[Int] {
 
   def spiralMemory(input: String): Try[Int] =
     parse(input).map { squareId =>
-      calculateOffset(Square(squareId)).steps.values.foldLeft(Steps(0))(_ + _).n
+      calculateOffset(Square(squareId)).distance.n
     }.wrapFailure(throwable => Failure(new SpiralMemoryFailure(input, throwable)))
 
   def verifySampleCases(): Unit = {
