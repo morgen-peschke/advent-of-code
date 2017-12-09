@@ -68,7 +68,7 @@ import com.peschke.advent_of_code.AdventOfCodeDay._
 object CorruptionChecksum extends AdventOfCodeDay[Int] {
 
   class CorruptionChecksumFailure(input: String, cause: Throwable)
-      extends IllegalStateException(s"Day2CorruptionChecksum failed on input:\n$input", cause)
+      extends IllegalStateException(s"CorruptionChecksum failed on input:\n$input", cause)
 
   def run(input: String): Seq[Try[Int]] =
     Seq(

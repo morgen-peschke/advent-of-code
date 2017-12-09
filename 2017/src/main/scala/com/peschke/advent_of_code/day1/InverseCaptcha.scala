@@ -63,7 +63,7 @@ import com.peschke.advent_of_code.AdventOfCodeDay._
 object InverseCaptcha extends AdventOfCodeDay[Int]{
 
   class InverseCaptchaFailure(input: String, cause: Throwable)
-      extends IllegalArgumentException(s"Day1InverseCaptcha failed on input:\n$input", cause)
+      extends IllegalArgumentException(s"InverseCaptcha failed on input:\n$input", cause)
 
   def run(input: String): Seq[Try[Int]] =
     List(
