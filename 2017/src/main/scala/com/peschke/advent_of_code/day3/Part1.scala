@@ -115,8 +115,8 @@ object Part1 {
     anchor.continue(Steps(square.id - anchor.corner.square.id))
   }
 
-  def spiralMemory(input: String): Try[String] =
+  def spiralMemory(input: String): Try[Steps] =
     SpiralMemory.parse(input).map { squareId =>
-      calculateOffset(Square(squareId)).distance.toString
+      calculateOffset(Square(squareId)).distance
     }.wrapFailure(throwable => Failure(new SpiralMemoryFailure(input, throwable)))
 }

@@ -3,8 +3,12 @@ package com.peschke.advent_of_code
 import scala.util.{Try, Failure, Success}
 import scala.util.control.NonFatal
 
-trait AdventOfCodeDay[T] {
-  def run(input: String): Seq[Try[T]]
+trait AdventOfCodeDay[P1, P2] {
+  def run(input: String): (Try[P1], Try[P2]) = (runDay1(input), runDay2(input))
+
+  def runDay1(input: String): Try[P1]
+  def runDay2(input: String): Try[P2]
+
   def verifySampleCases(): Unit
 }
 

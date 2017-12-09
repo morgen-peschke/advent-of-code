@@ -60,16 +60,13 @@ import com.peschke.advent_of_code.AdventOfCodeDay._
   * - 123123 produces 12.
   * - 12131415 produces 4.
   */
-object InverseCaptcha extends AdventOfCodeDay[Int]{
+object InverseCaptcha extends AdventOfCodeDay[Int, Int]{
 
   class InverseCaptchaFailure(input: String, cause: Throwable)
       extends IllegalArgumentException(s"InverseCaptcha failed on input:\n$input", cause)
 
-  def run(input: String): Seq[Try[Int]] =
-    List(
-      inverseCaptchaPart1 _,
-      inverseCaptchaPart2 _
-    ).map(_(input))
+  def runDay1(input: String): Try[Int] = inverseCaptchaPart1(input)
+  def runDay2(input: String): Try[Int] = inverseCaptchaPart2(input)
 
   def parse(input: String): Try[Vector[Int]] = Try {
     input.trim.toVector.map(_.toString.toInt)

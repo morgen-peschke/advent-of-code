@@ -205,12 +205,12 @@ object Part2 {
     loop(Memory.empty, allocator.iterator)
   }
 
-  def stressTest(input: String): Try[String] =
+  def stressTest(input: String): Try[Int] =
     SpiralMemory.parse(input).map { target =>
       stressTestGrid
         .map(_._1)
         .dropWhile(_.data <= target)
         .headOption
-        .fold("")(_.data.toString)
+        .fold(0)(_.data)
     }.wrapFailure(throwable => Failure(new SpiralMemoryFailure(input, throwable)))
 }

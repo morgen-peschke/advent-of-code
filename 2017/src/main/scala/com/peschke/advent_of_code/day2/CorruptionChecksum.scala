@@ -65,16 +65,13 @@ import com.peschke.advent_of_code.AdventOfCodeDay._
   * - In the third row, the result is 2.
   * - In this example, the sum of the results would be 4 + 3 + 2 = 9.
   */
-object CorruptionChecksum extends AdventOfCodeDay[Int] {
+object CorruptionChecksum extends AdventOfCodeDay[Int, Int] {
 
   class CorruptionChecksumFailure(input: String, cause: Throwable)
       extends IllegalStateException(s"CorruptionChecksum failed on input:\n$input", cause)
 
-  def run(input: String): Seq[Try[Int]] =
-    Seq(
-      checksum _,
-      rowResults _,
-    ).map(_(input))
+  def runDay1(input: String): Try[Int] = checksum(input)
+  def runDay2(input: String): Try[Int] = rowResults(input)
 
   def parse(input: String): Try[Array[Array[Int]]] =
     Try(input.split("\n").map(_.split("\\s+").map(_.trim.toInt)))

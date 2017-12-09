@@ -75,23 +75,20 @@ import Steps.syntax._
   * What is the first value written that is larger than your puzzle
   * input?
   */
-object SpiralMemory extends AdventOfCodeDay[String] {
+object SpiralMemory extends AdventOfCodeDay[Steps, Int] {
 
   def parse(input: String): Try[Int] = Try(input.toInt)
 
-  def run(input: String): Seq[Try[String]] =
-    List(
-      Part1.spiralMemory _,
-      Part2.stressTest _
-    ).map(_(input))
+  def runDay1(input: String): Try[Steps] = Part1.spiralMemory(input)
+  def runDay2(input: String): Try[Int]   = Part2.stressTest(input)
 
   def verifySampleCases(): Unit = {
     println("Checking part 1 sample cases")
     Seq(
-      "1" -> 0.steps.toString,
-      "12" -> 3.steps.toString,
-      "23" -> 2.steps.toString,
-      "1024" -> 31.steps.toString
+      "1" -> 0.steps,
+      "12" -> 3.steps,
+      "23" -> 2.steps,
+      "1024" -> 31.steps
     ).map((verifyResult(Part1.spiralMemory _) _).tupled).foreach(println)
 
     println("Checking part 2 sample case")

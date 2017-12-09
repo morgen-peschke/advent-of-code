@@ -121,8 +121,8 @@ object AdventOfCodeOpts {
 object AdventOfCode extends App {
   import AdventOfCodeOpts.DayOpts._
 
-  def processInputOrSamples[T](
-    day: AdventOfCodeDay[T],
+  def processInputOrSamples[P1, P2](
+    day: AdventOfCodeDay[P1, P2],
     inputOpt: Option[Input],
     verifySamples: Boolean): Unit = {
     if (verifySamples || inputOpt.isEmpty) {
@@ -130,9 +130,9 @@ object AdventOfCode extends App {
     }
 
     inputOpt.foreach { input =>
-      day.run(input.contents.trim).zipWithIndex.foreach {
-        case (result, i) => println(s"Part ${i + 1}: ${result.get}")
-      }
+      val (part1, part2) = day.run(input.contents.trim)
+      println(s"Part 1: ${part1.get}")
+      println(s"Part 2: ${part2.get}")
     }
   }
 
