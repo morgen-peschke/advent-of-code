@@ -1,9 +1,11 @@
 package com.peschke.advent_of_code.day3
 
-import scala.util.{Failure, Try}
+import scala.util.Try
 
 import com.peschke.advent_of_code.AdventOfCodeDay
 import com.peschke.advent_of_code.AdventOfCodeDay._
+
+import Steps.syntax._
 
 /**
   * http://adventofcode.com/2017/day/3
@@ -41,168 +43,66 @@ import com.peschke.advent_of_code.AdventOfCodeDay._
   *
   * How many steps are required to carry the data from the square
   * identified in your puzzle input all the way to the access port?
+  *
+  * --- Part Two ---
+  *
+  * As a stress test on the system, the programs here clear the grid
+  * and then store the value 1 in square 1. Then, in the same
+  * allocation order as shown above, they store the sum of the values
+  * in all adjacent squares, including diagonals.
+  *
+  * So, the first few squares' values are chosen as follows:
+  *
+  * - Square 1 starts with the value 1.
+  * - Square 2 has only one adjacent filled square (with value 1), so
+  *   it also stores 1.
+  * - Square 3 has both of the above squares as neighbors and stores
+  *   the sum of their values, 2.
+  * - Square 4 has all three of the aforementioned squares as
+  *   neighbors and stores the sum of their values, 4.
+  * - Square 5 only has the first and fourth squares as neighbors, so
+  *   it gets the value 5.
+  *
+  * Once a square is written, its value does not change. Therefore,
+  * the first few squares would receive the following values:
+  *
+  *    147  142  133  122   59
+  *    304    5    4    2   57
+  *    330   10    1    1   54
+  *    351   11   23   25   26
+  *    362  747  806--->   ...
+  *
+  * What is the first value written that is larger than your puzzle
+  * input?
   */
-object SpiralMemory extends AdventOfCodeDay[Int] {
-
-  class SpiralMemoryFailure(input: String, cause: Throwable)
-      extends IllegalArgumentException(s"Day3SpiralMemory failed on input:\n$input", cause)
-
-  case class Steps(n: Int) {
-    override def toString: String = s"$n steps"
-
-    def + (other: Steps): Steps = Steps(this.n + other.n)
-    def + (delta: Int): Steps = Steps(this.n + delta)
-
-    def - (other: Steps): Steps = Steps(this.n - other.n)
-
-    def unary_- : Steps = Steps(-this.n)
-
-    def abs: Steps = Steps(n.abs)
-  }
-
-  case class Level(n: Int, remainder: Double) {
-    def combined: Double = n.toDouble + remainder
-    /**
-      * Corner       | move   | Offset
-      * -------------+--------+------------
-      * 1  = 1       |   r    | 0
-      * 2  = 2 + 1   |   u    | l
-      * 3  = 2 + 1   |   l    | d l
-      * 5  = 3 + 2   |   d    | d r
-      * 7  = 5 + 2   |   r    | u r
-      * 10 = 7 + 3   |   u    | u l l
-      * 13 = 10 + 3  |   l    | d d l l
-      * 17 = 13 + 4  |   d    | d d r r
-      * 21 = 17 + 4  |   r    | u u r r
-      * 26 = 21 + 5  |   u    | u u l l l
-      * 31 = 26 + 5  |   l    | d d d l l l
-      *
-      * Upper Left Corner
-      * --------------+-----------+--------------------------------------+-----------+-----------
-      * 5   = 1  + 4  | 4(1) +  1 |                            4(1) +  1 | 1 + 4(1)  | 1 + 4(n^2)
-      * 17  = 5  + 12 | 4(3) +  5 |                     4(3) + 4(1) +  1 | 1 + 4(4)  | 1 + 4(n^2)
-      * 37  = 17 + 20 | 4(5) + 17 |              4(5) + 4(3) + 4(1) +  1 | 1 + 4(9)  | 1 + 4(n^2)
-      * 65  = 37 + 28 | 4(7) + 37 |        4(7) +4(5) + 4(3) + 4(1) +  1 | 1 + 4(16) | 1 + 4(n^2)
-      * 101 = 65 + 36 | 4(9) + 65 | 4(9) + 4(7) +4(5) + 4(3) + 4(1) +  1 | 1 + 4(25) | 1 + 4(n^2)
-      */
-    def toSquare: Square = Square(1 + (4 * Math.pow(combined, 2)).floor.toInt)
-  }
-
-  case class Square(id: Int) {
-    def toLevel: Level = {
-      val rawLevel = Math.sqrt( (id - 1).toDouble / 4 )
-      val n = rawLevel.floor.toInt
-      Level(n, rawLevel - n)
-    }
-
-    def toCorner(square: Square): Option[Corner] =
-      if (square.id == 0) Some(Corner.LowerLeft(square))
-      else Option(square.toLevel.remainder).collect {
-        case 0.00 => Corner.UpperLeft(square)
-        case 0.25 => Corner.LowerLeft(square)
-        case 0.50 => Corner.LowerRight(square)
-        case 0.75 => Corner.UpperRight(square)
-      }
-  }
-
-  sealed trait Direction
-  case object Horizontal extends Direction
-  case object Vertical extends Direction
-
-  sealed trait Corner {
-    def square: Square
-  }
-  object Corner {
-    case class UpperLeft(val square: Square) extends Corner
-    case class LowerLeft(val square: Square) extends Corner
-    case class LowerRight(val square: Square) extends Corner
-    case class UpperRight(val square: Square) extends Corner
-  }
-
-  case class Offset(vertical: Steps = Steps(0), horizontal: Steps = Steps(0)) {
-    def - (other: Offset): Offset =
-      Offset(
-        vertical = this.vertical - other.vertical,
-        horizontal = this.horizontal - other.horizontal
-      )
-
-    def distance: Steps = vertical.abs + horizontal.abs
-  }
-
-  case class Anchor(corner: Corner, offsetFromPort: Offset) {
-    def continue(n: Steps): Offset = {
-      val extraOffset =
-        corner match {
-          case Corner.UpperLeft(_) => Offset(vertical = -n)
-          case Corner.LowerLeft(_) => Offset(horizontal = n)
-          case Corner.LowerRight(_) => Offset(vertical = n)
-          case Corner.UpperRight(_) => Offset(horizontal = -n)
-        }
-      offsetFromPort - extraOffset
-    }
-  }
+object SpiralMemory extends AdventOfCodeDay[String] {
 
   def parse(input: String): Try[Int] = Try(input.toInt)
 
-  def run(input: String): Seq[Try[Int]] =
+  def run(input: String): Seq[Try[String]] =
     List(
-      spiralMemory _
+      Part1.spiralMemory _,
+      Part2.stressTest _
     ).map(_(input))
-
-  def previousAnchor(square: Square): Anchor =
-    if (square.id == 0) Anchor(Corner.LowerLeft(square), Offset())
-    else {
-      val level = square.toLevel
-
-      val corner =
-        if (level.remainder < 0.25)
-          Corner.UpperLeft(level.copy(remainder = 0.0).toSquare)
-        else if (level.remainder < 0.50)
-          Corner.LowerLeft(level.copy(remainder = 0.25).toSquare)
-        else if (level.remainder < 0.75)
-          Corner.LowerRight(level.copy(remainder = 0.50).toSquare)
-        else
-          Corner.UpperRight(level.copy(remainder = 0.75).toSquare)
-
-      val steps = Steps(level.n)
-      val offset = corner match {
-        case Corner.UpperLeft(_) =>
-          Offset(
-            vertical = -steps,
-            horizontal = steps)
-        case Corner.LowerLeft(_) =>
-          Offset(
-            vertical = steps,
-            horizontal = steps)
-        case Corner.LowerRight(_) =>
-          Offset(
-            vertical = steps,
-            horizontal = steps + 1)
-        case Corner.UpperRight(_) =>
-          Offset(
-            vertical = -steps,
-            horizontal = -steps)
-      }
-      Anchor(corner, offset)
-    }
-
-  def calculateOffset(square: Square): Offset = {
-    val anchor = previousAnchor(square)
-    anchor.continue(Steps(square.id - anchor.corner.square.id))
-  }
-
-  def spiralMemory(input: String): Try[Int] =
-    parse(input).map { squareId =>
-      calculateOffset(Square(squareId)).distance.n
-    }.wrapFailure(throwable => Failure(new SpiralMemoryFailure(input, throwable)))
 
   def verifySampleCases(): Unit = {
     println("Checking part 1 sample cases")
     Seq(
-      "1" -> 0,
-      "12" -> 3,
-      "23" -> 2,
-      "1024" -> 31
-    ).map((verifyResult(spiralMemory _) _).tupled).foreach(println)
+      "1" -> 0.steps.toString,
+      "12" -> 3.steps.toString,
+      "23" -> 2.steps.toString,
+      "1024" -> 31.steps.toString
+    ).map((verifyResult(Part1.spiralMemory _) _).tupled).foreach(println)
+
+    println("Checking part 2 sample case")
+    println(verifyResult( _ => Try {
+      "\n" + Part2.stressTestGrid.map(_._2).apply(22).show("")(_.data.toString).trim + "\n"
+    })("", """|
+              |147 142 133 122  59
+              |304   5   4   2  57
+              |330  10   1   1  54
+              |351  11  23  25  26
+              |362 747 806
+              |""".stripMargin))
   }
 }
