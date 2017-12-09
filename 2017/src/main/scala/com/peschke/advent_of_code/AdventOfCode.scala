@@ -6,6 +6,7 @@ import com.peschke.advent_of_code.day1.InverseCaptcha
 import com.peschke.advent_of_code.day2.CorruptionChecksum
 import com.peschke.advent_of_code.day3.SpiralMemory
 import com.peschke.advent_of_code.day4.HighEntropyPassphrases
+import com.peschke.advent_of_code.day5.TrampolineMaze
 
 object AdventOfCodeOpts {
   case class DayOpts(
@@ -22,6 +23,7 @@ object AdventOfCodeOpts {
         case Day.CorruptionChecksum => CorruptionChecksum
         case Day.SpiralMemory => SpiralMemory
         case Day.HighEntropyPassphrases => HighEntropyPassphrases
+        case Day.TrampolineMaze => TrampolineMaze
       }
       if (verifySamples || inputOpt.isEmpty) {
         adventOfCodeDay.verifySampleCases()
@@ -42,6 +44,7 @@ object AdventOfCodeOpts {
     case object CorruptionChecksum extends Day
     case object SpiralMemory extends Day
     case object HighEntropyPassphrases extends Day
+    case object TrampolineMaze extends Day
   }
 
   val optParser: OptionParser[DayOpts] = new OptionParser[DayOpts]("AdventOfCode") {
@@ -95,6 +98,14 @@ object AdventOfCodeOpts {
       note("")
     }
 
+    def trampolineMazeCmd(cmdStr: String) = {
+      cmd(cmdStr)
+        .action((_, c) => c.copy(day = Day.TrampolineMaze))
+        .text("  Day 5: A Maze of Twisty Trampolines, All Alike")
+        .children(note(""), verifySamplesOpt, inputArg)
+      note("")
+    }
+
     inverseCaptchaCmd("day1")
     inverseCaptchaCmd("inverseCaptcha")
 
@@ -106,6 +117,9 @@ object AdventOfCodeOpts {
 
     highEntropyPassphrasesCmd("day4")
     highEntropyPassphrasesCmd("highEntropyPassphrases")
+
+    trampolineMazeCmd("day5")
+    trampolineMazeCmd("trampolineMaze")
 
     checkConfig {
       case DayOpts(Day.NoDayChosen, _, _) => failure("No day chosen")
