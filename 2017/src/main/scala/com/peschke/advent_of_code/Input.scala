@@ -41,7 +41,7 @@ object Input {
   implicit val inputReads: Read[Input] =
     Read.reads {
       case "stream://stdin" => FromStdIn
-      case pathStr if pathStr.startsWith("file://") => FromPath(Paths.get(pathStr.drop(8)))
+      case pathStr if pathStr.startsWith("file://") => FromPath(Paths.get(pathStr.drop(7)))
       case other => FromString(other)
     }
 }
