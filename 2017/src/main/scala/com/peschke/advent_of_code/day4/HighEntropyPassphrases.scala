@@ -49,8 +49,8 @@ import com.peschke.advent_of_code.AdventOfCodeDay._
   */
 object HighEntropyPassphrases extends AdventOfCodeDay[Int, Int] {
 
-  def runDay1(input: String): scala.util.Try[Int] = Part1.validate(input)
-  def runDay2(input: String): scala.util.Try[Int] = Part2.validate(input)
+  def runPart1(input: String): scala.util.Try[Int] = Part1.validate(input)
+  def runPart2(input: String): scala.util.Try[Int] = Part2.validate(input)
 
   def parse(input: String): Try[Seq[Passphrase]] = Try {
     input.split("\n").toSeq.map { rawPassphrase =>

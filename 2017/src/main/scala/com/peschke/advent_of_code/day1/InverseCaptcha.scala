@@ -65,8 +65,8 @@ object InverseCaptcha extends AdventOfCodeDay[Int, Int]{
   class InverseCaptchaFailure(input: String, cause: Throwable)
       extends IllegalArgumentException(s"InverseCaptcha failed on input:\n$input", cause)
 
-  def runDay1(input: String): Try[Int] = inverseCaptchaPart1(input)
-  def runDay2(input: String): Try[Int] = inverseCaptchaPart2(input)
+  def runPart1(input: String): Try[Int] = inverseCaptchaPart1(input)
+  def runPart2(input: String): Try[Int] = inverseCaptchaPart2(input)
 
   def parse(input: String): Try[Vector[Int]] = Try {
     input.trim.toVector.map(_.toString.toInt)

@@ -70,8 +70,8 @@ object CorruptionChecksum extends AdventOfCodeDay[Int, Int] {
   class CorruptionChecksumFailure(input: String, cause: Throwable)
       extends IllegalStateException(s"CorruptionChecksum failed on input:\n$input", cause)
 
-  def runDay1(input: String): Try[Int] = checksum(input)
-  def runDay2(input: String): Try[Int] = rowResults(input)
+  def runPart1(input: String): Try[Int] = checksum(input)
+  def runPart2(input: String): Try[Int] = rowResults(input)
 
   def parse(input: String): Try[Array[Array[Int]]] =
     Try(input.split("\n").map(_.split("\\s+").map(_.trim.toInt)))

@@ -70,8 +70,8 @@ import scala.util.Try
   */
 object TrampolineMaze extends AdventOfCodeDay[Int, Int] {
 
-  def runDay1(input: String): Try[Int] = Part1.stepsUntilExit(input)
-  def runDay2(input: String): Try[Int] = Part2.stepsUntilExit(input)
+  def runPart1(input: String): Try[Int] = Part1.stepsUntilExit(input)
+  def runPart2(input: String): Try[Int] = Part2.stepsUntilExit(input)
 
   def verifySampleCases(): Unit = {
     val sampleInput =

@@ -79,8 +79,8 @@ object SpiralMemory extends AdventOfCodeDay[Steps, Int] {
 
   def parse(input: String): Try[Int] = Try(input.toInt)
 
-  def runDay1(input: String): Try[Steps] = Part1.spiralMemory(input)
-  def runDay2(input: String): Try[Int]   = Part2.stressTest(input)
+  def runPart1(input: String): Try[Steps] = Part1.spiralMemory(input)
+  def runPart2(input: String): Try[Int]   = Part2.stressTest(input)
 
   def verifySampleCases(): Unit = {
     println("Checking part 1 sample cases")

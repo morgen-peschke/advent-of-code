@@ -4,10 +4,10 @@ import scala.util.{Try, Failure, Success}
 import scala.util.control.NonFatal
 
 trait AdventOfCodeDay[P1, P2] {
-  def run(input: String): (Try[P1], Try[P2]) = (runDay1(input), runDay2(input))
+  def run(input: String): (Try[P1], Try[P2]) = (runPart1(input), runPart2(input))
 
-  def runDay1(input: String): Try[P1]
-  def runDay2(input: String): Try[P2]
+  def runPart1(input: String): Try[P1]
+  def runPart2(input: String): Try[P2]
 
   def verifySampleCases(): Unit
 }
