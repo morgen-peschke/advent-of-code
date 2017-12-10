@@ -73,27 +73,19 @@ object TrampolineMaze extends AdventOfCodeDay[Int, Int] {
   def runPart1(input: String): Try[Int] = Part1.stepsUntilExit(input)
   def runPart2(input: String): Try[Int] = Part2.stepsUntilExit(input)
 
-  def verifySampleCases(): Unit = {
-    val sampleInput =
+  private val sampleInput: String =
       """|0
          |3
          |0
          |1
          |-3""".stripMargin
 
+  def verifyPart1Samples(): Unit = {
     def testPart1FollowJumps(input: String): Try[List[String]] =
       parse(input)
         .map(Part1.followJumps)
         .map(_.take(10).map(_.render(columnWidth = Some(4))).toList)
 
-    def testPart2FollowJumps(input: String): Try[String] =
-      parse(input)
-        .map(Part2.followJumps)
-        .map(_.take(20))
-        .map(_.last)
-        .map(_.render(columnWidth = Some(4)))
-
-    println("Checking part 1 sample cases")
     println(verifyResult(testPart1FollowJumps)(
       sampleInput,
       List(
@@ -105,8 +97,16 @@ object TrampolineMaze extends AdventOfCodeDay[Int, Int] {
         "[   2    5    0    1   -2]")))
 
     println(verifyResult(Part1.stepsUntilExit _)(sampleInput, 5))
+  }
 
-    println("Checking part 2 sample case")
+  def verifyPart2Samples(): Unit = {
+    def testPart2FollowJumps(input: String): Try[String] =
+      parse(input)
+        .map(Part2.followJumps)
+        .map(_.take(20))
+        .map(_.last)
+        .map(_.render(columnWidth = Some(4)))
+
     println(verifyResult(testPart2FollowJumps)(sampleInput, "[   2    3    2    3   -1]"))
     println(verifyResult(Part2.stepsUntilExit _)(sampleInput, 10))
   }

@@ -99,16 +99,16 @@ object InverseCaptcha extends AdventOfCodeDay[Int, Int]{
         .sum
     }.wrapFailure(throwable => Failure(new InverseCaptchaFailure(input, throwable)))
 
-  def verifySampleCases(): Unit = {
-    println("Checking part 1 sample cases")
+  def verifyPart1Samples(): Unit = {
     Seq(
       "1122" -> 3,
       "1111" -> 4,
       "1234" -> 0,
       "91212129" -> 9
     ).map((verifyResult(inverseCaptchaPart1 _) _).tupled).foreach(println)
+  }
 
-    println("\nChecking part 2 sample cases")
+  def verifyPart2Samples(): Unit = {
     Seq(
       "1212" -> 6,
       "1221" -> 0,

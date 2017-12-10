@@ -58,15 +58,15 @@ object HighEntropyPassphrases extends AdventOfCodeDay[Int, Int] {
     }
   }
 
-  def verifySampleCases(): Unit = {
-    println("Checking part 1 sample cases")
+  def verifyPart1Samples(): Unit = {
     Seq(
       "aa bb cc dd ee" -> 1,
       "aa bb cc dd aa" -> 0,
       "aa bb cc dd aaa" -> 1
     ).map((verifyResult(Part1.validate _) _).tupled).foreach(println)
+  }
 
-    println("Checking part 2 sample cases")
+  def verifyPart2Samples(): Unit = {
     Seq(
       "abcde fghij"              -> 1,
       "abcde xyz ecdab"          -> 0,

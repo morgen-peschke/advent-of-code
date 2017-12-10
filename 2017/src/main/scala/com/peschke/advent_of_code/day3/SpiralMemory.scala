@@ -82,16 +82,16 @@ object SpiralMemory extends AdventOfCodeDay[Steps, Int] {
   def runPart1(input: String): Try[Steps] = Part1.spiralMemory(input)
   def runPart2(input: String): Try[Int]   = Part2.stressTest(input)
 
-  def verifySampleCases(): Unit = {
-    println("Checking part 1 sample cases")
+  def verifyPart1Samples(): Unit = {
     Seq(
       "1" -> 0.steps,
       "12" -> 3.steps,
       "23" -> 2.steps,
       "1024" -> 31.steps
     ).map((verifyResult(Part1.spiralMemory _) _).tupled).foreach(println)
+  }
 
-    println("Checking part 2 sample case")
+  def verifyPart2Samples(): Unit = {
     println(verifyResult( _ => Try {
       "\n" + Part2.stressTestGrid.map(_._2).apply(22).show("")(_.data.toString).trim + "\n"
     })("", """|

@@ -99,15 +99,15 @@ object CorruptionChecksum extends AdventOfCodeDay[Int, Int] {
       }.sum
     }.wrapFailure(throwable => Failure(new CorruptionChecksumFailure(input, throwable)))
 
-  def verifySampleCases(): Unit = {
-    println("Checking part 1 sample cases")
+  def verifyPart1Samples(): Unit = {
     println(verifyResult(checksum _)(
       """|5 1 9 5
          |7 5 3
          |2 4 6 8""".stripMargin,
       18))
+  }
 
-    println("\nChecking part 2 sample cases")
+  def verifyPart2Samples(): Unit = {
     println(verifyResult(rowResults _)(
       """|5 9 2 8
          |9 4 7 3
