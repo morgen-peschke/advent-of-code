@@ -8,6 +8,7 @@ import com.peschke.advent_of_code.day3.SpiralMemory
 import com.peschke.advent_of_code.day4.HighEntropyPassphrases
 import com.peschke.advent_of_code.day5.TrampolineMaze
 import com.peschke.advent_of_code.day6.MemoryReallocation
+import com.peschke.advent_of_code.day7.RecursiveCircus
 
 object AdventOfCodeOpts {
   case class DayOpts(
@@ -26,6 +27,7 @@ object AdventOfCodeOpts {
         case Day.HighEntropyPassphrases => HighEntropyPassphrases
         case Day.TrampolineMaze => TrampolineMaze
         case Day.MemoryReallocation => MemoryReallocation
+        case Day.RecursiveCircus => RecursiveCircus
       }
       if (verifySamples || inputOpt.isEmpty) {
         adventOfCodeDay.verifySampleCases()
@@ -48,6 +50,7 @@ object AdventOfCodeOpts {
     case object HighEntropyPassphrases extends Day
     case object TrampolineMaze extends Day
     case object MemoryReallocation extends Day
+    case object RecursiveCircus extends Day
   }
 
   val optParser: OptionParser[DayOpts] = new OptionParser[DayOpts]("AdventOfCode") {
@@ -117,6 +120,14 @@ object AdventOfCodeOpts {
       note("")
     }
 
+    def recursiveCircusCmd(cmdStr: String) = {
+      cmd(cmdStr)
+        .action((_, c) => c.copy(day = Day.RecursiveCircus))
+        .text("  Day 7: Recursive Circus")
+        .children(note(""), verifySamplesOpt, inputArg)
+      note("")
+    }
+
     inverseCaptchaCmd("day1")
     inverseCaptchaCmd("inverseCaptcha")
 
@@ -134,6 +145,9 @@ object AdventOfCodeOpts {
 
     memoryReallocationCmd("day6")
     memoryReallocationCmd("memoryReallocation")
+
+    recursiveCircusCmd("day7")
+    recursiveCircusCmd("recursiveCircus")
 
     checkConfig {
       case DayOpts(Day.NoDayChosen, _, _) => failure("No day chosen")

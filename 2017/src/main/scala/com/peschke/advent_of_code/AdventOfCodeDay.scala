@@ -20,6 +20,10 @@ trait AdventOfCodeDay[P1, P2] {
 }
 
 object AdventOfCodeDay {
+  implicit class FunctionTryOps[I,O](val f: I => O) extends AnyVal {
+    def liftedToTry: I => Try[O] = (i: I) => Try(f(i))
+  }
+
   def verifyResult[I, T](f: I => Try[T])(input: I, expected: T): String = {
     f(input) match {
       case Success(`expected`) => s"[Pass]"
