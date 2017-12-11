@@ -7,6 +7,7 @@ import com.peschke.advent_of_code.day2.CorruptionChecksum
 import com.peschke.advent_of_code.day3.SpiralMemory
 import com.peschke.advent_of_code.day4.HighEntropyPassphrases
 import com.peschke.advent_of_code.day5.TrampolineMaze
+import com.peschke.advent_of_code.day6.MemoryReallocation
 
 object AdventOfCodeOpts {
   case class DayOpts(
@@ -24,15 +25,16 @@ object AdventOfCodeOpts {
         case Day.SpiralMemory => SpiralMemory
         case Day.HighEntropyPassphrases => HighEntropyPassphrases
         case Day.TrampolineMaze => TrampolineMaze
+        case Day.MemoryReallocation => MemoryReallocation
       }
       if (verifySamples || inputOpt.isEmpty) {
         adventOfCodeDay.verifySampleCases()
+        inputOpt.foreach(_ => println())
       }
-
       inputOpt.foreach { input =>
-        val (part1, part2) = adventOfCodeDay.run(input.contents.trim)
-        println(s"Part 1: ${part1.get}")
-        println(s"Part 2: ${part2.get}")
+        val trimmed = input.contents.trim
+        println(s"Part 1: ${adventOfCodeDay.runPart1(trimmed).get}")
+        println(s"Part 2: ${adventOfCodeDay.runPart2(trimmed).get}")
       }
     }
   }
@@ -45,6 +47,7 @@ object AdventOfCodeOpts {
     case object SpiralMemory extends Day
     case object HighEntropyPassphrases extends Day
     case object TrampolineMaze extends Day
+    case object MemoryReallocation extends Day
   }
 
   val optParser: OptionParser[DayOpts] = new OptionParser[DayOpts]("AdventOfCode") {
@@ -106,6 +109,14 @@ object AdventOfCodeOpts {
       note("")
     }
 
+    def memoryReallocationCmd(cmdStr: String) = {
+      cmd(cmdStr)
+        .action((_, c) => c.copy(day = Day.MemoryReallocation))
+        .text("  Day 6: Memory Reallocation")
+        .children(note(""), verifySamplesOpt, inputArg)
+      note("")
+    }
+
     inverseCaptchaCmd("day1")
     inverseCaptchaCmd("inverseCaptcha")
 
@@ -120,6 +131,9 @@ object AdventOfCodeOpts {
 
     trampolineMazeCmd("day5")
     trampolineMazeCmd("trampolineMaze")
+
+    memoryReallocationCmd("day6")
+    memoryReallocationCmd("memoryReallocation")
 
     checkConfig {
       case DayOpts(Day.NoDayChosen, _, _) => failure("No day chosen")
@@ -137,20 +151,5 @@ object AdventOfCodeOpts {
 }
 
 object AdventOfCode extends App {
-  def processInputOrSamples[P1, P2](
-    day: AdventOfCodeDay[P1, P2],
-    inputOpt: Option[Input],
-    verifySamples: Boolean): Unit = {
-    if (verifySamples || inputOpt.isEmpty) {
-      day.verifySampleCases()
-    }
-
-    inputOpt.foreach { input =>
-      val (part1, part2) = day.run(input.contents.trim)
-      println(s"Part 1: ${part1.get}")
-      println(s"Part 2: ${part2.get}")
-    }
-  }
-
   AdventOfCodeOpts.parse(args).foreach(_.run())
 }

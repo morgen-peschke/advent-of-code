@@ -92,9 +92,9 @@ object SpiralMemory extends AdventOfCodeDay[Steps, Int] {
   }
 
   def verifyPart2Samples(): Unit = {
-    println(verifyResult( _ => Try {
+    println(verifyResult( (_: Unit) => Try {
       "\n" + Part2.stressTestGrid.map(_._2).apply(22).show("")(_.data.toString).trim + "\n"
-    })("", """|
+    })((), """|
               |147 142 133 122  59
               |304   5   4   2  57
               |330  10   1   1  54

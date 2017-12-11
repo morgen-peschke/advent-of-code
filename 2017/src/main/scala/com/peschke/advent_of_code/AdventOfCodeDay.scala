@@ -4,7 +4,6 @@ import scala.util.{Try, Failure, Success}
 import scala.util.control.NonFatal
 
 trait AdventOfCodeDay[P1, P2] {
-  def run(input: String): (Try[P1], Try[P2]) = (runPart1(input), runPart2(input))
   def verifySampleCases(): Unit = {
     println("Checking part 1 sample cases")
     verifyPart1Samples()
@@ -21,7 +20,7 @@ trait AdventOfCodeDay[P1, P2] {
 }
 
 object AdventOfCodeDay {
-  def verifyResult[T](f: String => Try[T])(input: String, expected: T): String = {
+  def verifyResult[I, T](f: I => Try[T])(input: I, expected: T): String = {
     f(input) match {
       case Success(`expected`) => s"[Pass]"
       case Success(actual) => s"[Fail] returned $actual, but expected $expected"
@@ -34,5 +33,7 @@ object AdventOfCodeDay {
 
   implicit class TryOpts[T](val t: Try[T]) extends AnyVal {
     def wrapFailure(f: Throwable => Failure[T]): Try[T] = t.transform(Success(_), f)
+
+    def mapError(f: Throwable => Throwable): Try[T] = wrapFailure(t => Failure(f(t)))
   }
 }
