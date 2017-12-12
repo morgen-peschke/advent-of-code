@@ -62,7 +62,7 @@ object AdventOfCodeOpts {
     note("http://adventofcode.com/2017")
 
     def verifySamplesOpt =
-      opt[Unit]("verify-samples")
+      opt[Unit]("verify")
         .text("verify the sample input, defaults to false unless no arguments are given")
         .optional
         .maxOccurs(1)
@@ -75,93 +75,53 @@ object AdventOfCodeOpts {
         .maxOccurs(1)
         .action((i, c) => c.copy(inputOpt = Some(i)))
 
-    def inverseCaptchaCmd(cmdStr: String) = {
-      cmd(cmdStr)
-        .action((_, c) => c.copy(day = Day.InverseCaptcha))
-        .text("  Day 1: Inverse Captcha")
-        .children(note(""), verifySamplesOpt, inputArg)
-      note("")
-    }
+    cmd("day1")
+      .action((_, c) => c.copy(day = Day.InverseCaptcha))
+      .text("  Day 1: Inverse Captcha")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
 
-    def corruptionChecksumCmd(cmdStr: String) = {
-      cmd(cmdStr)
-        .action((_, c) => c.copy(day = Day.CorruptionChecksum))
-        .text("  Day 2: Corruption Checksum")
-        .children(note(""), verifySamplesOpt, inputArg)
-      note("")
-    }
+    cmd("day2")
+      .action((_, c) => c.copy(day = Day.CorruptionChecksum))
+      .text("  Day 2: Corruption Checksum")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
 
-    def spiralMemoryCmd(cmdStr: String) = {
-      cmd(cmdStr)
-        .action((_, c) => c.copy(day = Day.SpiralMemory))
-        .text("  Day 3: Spiral Memory")
-        .children(note(""), verifySamplesOpt, inputArg)
-      note("")
-    }
+    cmd("day3")
+      .action((_, c) => c.copy(day = Day.SpiralMemory))
+      .text("  Day 3: Spiral Memory")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
 
-    def highEntropyPassphrasesCmd(cmdStr: String) = {
-      cmd(cmdStr)
-        .action((_, c) => c.copy(day = Day.HighEntropyPassphrases))
-        .text("  Day 4: High-Entropy Passphrases")
-        .children(note(""), verifySamplesOpt, inputArg)
-      note("")
-    }
+    cmd("day4")
+      .action((_, c) => c.copy(day = Day.HighEntropyPassphrases))
+      .text("  Day 4: High-Entropy Passphrases")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
 
-    def trampolineMazeCmd(cmdStr: String) = {
-      cmd(cmdStr)
-        .action((_, c) => c.copy(day = Day.TrampolineMaze))
-        .text("  Day 5: A Maze of Twisty Trampolines, All Alike")
-        .children(note(""), verifySamplesOpt, inputArg)
-      note("")
-    }
+    cmd("day5")
+      .action((_, c) => c.copy(day = Day.TrampolineMaze))
+      .text("  Day 5: A Maze of Twisty Trampolines, All Alike")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
 
-    def memoryReallocationCmd(cmdStr: String) = {
-      cmd(cmdStr)
-        .action((_, c) => c.copy(day = Day.MemoryReallocation))
-        .text("  Day 6: Memory Reallocation")
-        .children(note(""), verifySamplesOpt, inputArg)
-      note("")
-    }
+    cmd("day6")
+      .action((_, c) => c.copy(day = Day.MemoryReallocation))
+      .text("  Day 6: Memory Reallocation")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
 
-    def recursiveCircusCmd(cmdStr: String) = {
-      cmd(cmdStr)
-        .action((_, c) => c.copy(day = Day.RecursiveCircus))
-        .text("  Day 7: Recursive Circus")
-        .children(note(""), verifySamplesOpt, inputArg)
-      note("")
-    }
+    cmd("day7")
+      .action((_, c) => c.copy(day = Day.RecursiveCircus))
+      .text("  Day 7: Recursive Circus")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
 
-    def iHeardYouLikeRegistersCmd(cmdStr: String) = {
-      cmd(cmdStr)
-        .action((_, c) => c.copy(day = Day.IHeardYouLikeRegisters))
-        .text("  Day 8: I Heard You Like Registers")
-        .children(note(""), verifySamplesOpt, inputArg)
-      note("")
-    }
-
-    inverseCaptchaCmd("day1")
-    inverseCaptchaCmd("inverseCaptcha")
-
-    corruptionChecksumCmd("day2")
-    corruptionChecksumCmd("corruptionChecksum")
-
-    spiralMemoryCmd("day3")
-    spiralMemoryCmd("spiralMemory")
-
-    highEntropyPassphrasesCmd("day4")
-    highEntropyPassphrasesCmd("highEntropyPassphrases")
-
-    trampolineMazeCmd("day5")
-    trampolineMazeCmd("trampolineMaze")
-
-    memoryReallocationCmd("day6")
-    memoryReallocationCmd("memoryReallocation")
-
-    recursiveCircusCmd("day7")
-    recursiveCircusCmd("recursiveCircus")
-
-    iHeardYouLikeRegistersCmd("day8")
-    iHeardYouLikeRegistersCmd("iHeardYouLikeRegisters")
+    cmd("day8")
+      .action((_, c) => c.copy(day = Day.IHeardYouLikeRegisters))
+      .text("  Day 8: I Heard You Like Registers")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
 
     checkConfig {
       case DayOpts(Day.NoDayChosen, _, _) => failure("No day chosen")
