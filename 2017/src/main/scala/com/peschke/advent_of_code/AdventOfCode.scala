@@ -9,6 +9,7 @@ import com.peschke.advent_of_code.day4.HighEntropyPassphrases
 import com.peschke.advent_of_code.day5.TrampolineMaze
 import com.peschke.advent_of_code.day6.MemoryReallocation
 import com.peschke.advent_of_code.day7.RecursiveCircus
+import com.peschke.advent_of_code.day8.IHeardYouLikeRegisters
 
 object AdventOfCodeOpts {
   case class DayOpts(
@@ -28,6 +29,7 @@ object AdventOfCodeOpts {
         case Day.TrampolineMaze => TrampolineMaze
         case Day.MemoryReallocation => MemoryReallocation
         case Day.RecursiveCircus => RecursiveCircus
+        case Day.IHeardYouLikeRegisters => IHeardYouLikeRegisters
       }
       if (verifySamples || inputOpt.isEmpty) {
         adventOfCodeDay.verifySampleCases()
@@ -51,6 +53,7 @@ object AdventOfCodeOpts {
     case object TrampolineMaze extends Day
     case object MemoryReallocation extends Day
     case object RecursiveCircus extends Day
+    case object IHeardYouLikeRegisters extends Day
   }
 
   val optParser: OptionParser[DayOpts] = new OptionParser[DayOpts]("AdventOfCode") {
@@ -128,6 +131,14 @@ object AdventOfCodeOpts {
       note("")
     }
 
+    def iHeardYouLikeRegistersCmd(cmdStr: String) = {
+      cmd(cmdStr)
+        .action((_, c) => c.copy(day = Day.IHeardYouLikeRegisters))
+        .text("  Day 8: I Heard You Like Registers")
+        .children(note(""), verifySamplesOpt, inputArg)
+      note("")
+    }
+
     inverseCaptchaCmd("day1")
     inverseCaptchaCmd("inverseCaptcha")
 
@@ -148,6 +159,9 @@ object AdventOfCodeOpts {
 
     recursiveCircusCmd("day7")
     recursiveCircusCmd("recursiveCircus")
+
+    iHeardYouLikeRegistersCmd("day8")
+    iHeardYouLikeRegistersCmd("iHeardYouLikeRegisters")
 
     checkConfig {
       case DayOpts(Day.NoDayChosen, _, _) => failure("No day chosen")

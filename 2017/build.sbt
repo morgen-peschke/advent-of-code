@@ -11,6 +11,7 @@ lazy val root = (project in file("."))
       "-deprecation",
       "-unchecked",
       "-feature",
+      "-Ypartial-unification",
       "-Ywarn-adapted-args",
       "-Ywarn-inaccessible",
       "-Ywarn-unused",
