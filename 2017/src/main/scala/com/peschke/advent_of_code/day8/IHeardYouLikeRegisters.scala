@@ -11,7 +11,7 @@ import cats.syntax.foldable._
 
 import cats.instances.list._
 
-import scala.util.Try
+import scala.util.{Try, Failure, Success}
 
 /**
   * http://adventofcode.com/2017/day/8
@@ -53,28 +53,56 @@ import scala.util.Try
   *
   * What is the largest value in any register after completing the
   * instructions in your puzzle input?
+  *
+  * --- Part Two ---
+  *
+  * To be safe, the CPU also needs to know the highest value held in
+  * any register during this process so that it can decide how much
+  * memory to allocate to these operations. For example, in the above
+  * instructions, the highest value ever held was 10 (in register c
+  * after the third instruction was evaluated).
   */
-object IHeardYouLikeRegisters extends AdventOfCodeDay[Amount, Nothing] {
-  def runPart1(input: String): Try[Amount] = Try {
-    Instruction
-      .compile(input)
-      .map(Part1.eval)
-      .map(_.values.toList.maximumOption)
-      match {
-        case Valid(Some(v)) => v
-        case Valid(None) =>
-          throw new IHeardYouLikeRegistersFailure(
-            input,
-            new NoSuchElementException("Memory was empty after evaluation"))
-        case Invalid(errors) =>
-          val renderedErrors = errors.toList.mkString("\n")
-          throw new IHeardYouLikeRegistersFailure(
-            input,
-            new IllegalStateException(s"Expected Valid, but was:\n$renderedErrors"))
-      }
+object IHeardYouLikeRegisters extends AdventOfCodeDay[Amount, Amount] {
+  def compile(input: String): Try[List[Instruction]] = Instruction.compile(input) match {
+    case Invalid(errors) =>
+      val renderedErrors = errors.toList.mkString("\n")
+      Failure(new IHeardYouLikeRegistersFailure(
+        input,
+        new IllegalArgumentException(s"Input failed to compile:\n$renderedErrors")
+      ))
+
+    case Valid(Nil) =>
+      Failure(new IHeardYouLikeRegistersFailure(
+        input,
+        new IllegalArgumentException("Input compiled to empty list of instructions")))
+
+    case Valid(v) => Success(v)
   }
 
-  def runPart2(input: String): Try[Nothing] = ???
+  def optionAmountToTry(input: String)(amountOpt: Option[Amount]): Try[Amount] =
+    amountOpt match {
+      case Some(v) => Success(v)
+      case None =>
+        Failure(
+          new IHeardYouLikeRegistersFailure(
+            input,
+            new NoSuchElementException("Memory was empty after evaluation")))
+    }
+
+  def runPart1(input: String): Try[Amount] =
+    compile(input)
+      .map(Part1.eval)
+      .map(_.values.toList.maximumOption)
+      .flatMap(optionAmountToTry(input))
+
+
+  def runPart2(input: String): Try[Amount] =
+    compile(input)
+      .map((Part2.eval _) andThen (_.iterator))
+      .map { itr =>
+        itr.flatMap(_.values.toList.maximumOption).toList.maximumOption
+      }
+      .flatMap(optionAmountToTry(input))
 
   private val sampleInput = """|b inc 5 if a > 1
                                |a inc 1 if b < 5
@@ -130,9 +158,11 @@ object IHeardYouLikeRegisters extends AdventOfCodeDay[Amount, Nothing] {
       Part1.Memory(
         Register("a") -> Amount(1),
         Register("c") -> Amount(-10))))
+
+    println(verifyResult(runPart1)(sampleInput, Amount(1)))
   }
 
   def verifyPart2Samples(): Unit = {
-
+    println(verifyResult(runPart2)(sampleInput, Amount(10)))
   }
 }
