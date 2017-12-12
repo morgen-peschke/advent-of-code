@@ -1,8 +1,7 @@
-package com.peschke.advent_of_code.day4
+package com.peschke.advent_of_code
+package day4
 
 import scala.util.{Try, Failure}
-
-import com.peschke.advent_of_code.AdventOfCodeDay._
 
 object Part1 {
   implicit class PassphraseOps(val p: Passphrase) extends AnyVal {

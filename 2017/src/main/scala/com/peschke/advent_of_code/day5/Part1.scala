@@ -1,8 +1,7 @@
-package com.peschke.advent_of_code.day5
+package com.peschke.advent_of_code
+package day5
 
 import scala.util.{Try, Failure}
-
-import com.peschke.advent_of_code.AdventOfCodeDay._
 
 object Part1 {
   def followJumps(instructions: Instructions): Stream[Instructions] = {

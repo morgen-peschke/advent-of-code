@@ -1,7 +1,7 @@
-package com.peschke.advent_of_code.day7
+package com.peschke.advent_of_code
+package day7
 
 import com.peschke.advent_of_code.AdventOfCodeDay
-import com.peschke.advent_of_code.AdventOfCodeDay._
 
 import cats.data.NonEmptyList
 import cats.syntax.option._

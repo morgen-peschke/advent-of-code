@@ -1,9 +1,9 @@
-package com.peschke.advent_of_code.day1
+package com.peschke.advent_of_code
+package day1
 
 import scala.util.{Failure, Try}
 
 import com.peschke.advent_of_code.AdventOfCodeDay
-import com.peschke.advent_of_code.AdventOfCodeDay._
 
 /**
   * http://adventofcode.com/2017/day/1

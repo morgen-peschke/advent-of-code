@@ -1,8 +1,7 @@
-package com.peschke.advent_of_code.day6
+package com.peschke.advent_of_code
+package day6
 
 import scala.util.{Try, Failure, Success}
-
-import com.peschke.advent_of_code.AdventOfCodeDay._
 
 object Part1 {
   def stepsUntilCycle(input: String): Try[Int] = {

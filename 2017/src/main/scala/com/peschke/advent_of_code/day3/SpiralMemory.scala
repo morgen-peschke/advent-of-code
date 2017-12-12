@@ -1,9 +1,9 @@
-package com.peschke.advent_of_code.day3
+package com.peschke.advent_of_code
+package day3
 
 import scala.util.Try
 
 import com.peschke.advent_of_code.AdventOfCodeDay
-import com.peschke.advent_of_code.AdventOfCodeDay._
 
 import Steps.syntax._
 

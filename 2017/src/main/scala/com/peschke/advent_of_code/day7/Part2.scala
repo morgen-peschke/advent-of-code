@@ -1,8 +1,7 @@
-package com.peschke.advent_of_code.day7
+package com.peschke.advent_of_code
+package day7
 
 import cats.syntax.option._
-
-import com.peschke.advent_of_code.AdventOfCodeDay._
 
 import scala.util.Try
 

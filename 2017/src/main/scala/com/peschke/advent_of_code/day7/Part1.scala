@@ -1,9 +1,8 @@
-package com.peschke.advent_of_code.day7
+package com.peschke.advent_of_code
+package day7
 
 import scala.util.Try
 import cats.data.NonEmptyList
-
-import com.peschke.advent_of_code.AdventOfCodeDay._
 
 object Part1 {
   def buildTree(infoSeq: Seq[ProgramInfo]): Try[Program] = {

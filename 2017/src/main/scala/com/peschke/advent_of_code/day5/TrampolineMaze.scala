@@ -1,7 +1,7 @@
-package com.peschke.advent_of_code.day5
+package com.peschke.advent_of_code
+package day5
 
 import com.peschke.advent_of_code.AdventOfCodeDay
-import com.peschke.advent_of_code.AdventOfCodeDay._
 
 import scala.util.Try
 
