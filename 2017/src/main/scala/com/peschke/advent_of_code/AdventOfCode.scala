@@ -10,6 +10,7 @@ import com.peschke.advent_of_code.day5.TrampolineMaze
 import com.peschke.advent_of_code.day6.MemoryReallocation
 import com.peschke.advent_of_code.day7.RecursiveCircus
 import com.peschke.advent_of_code.day8.IHeardYouLikeRegisters
+import com.peschke.advent_of_code.day9.StreamProcessing
 
 object AdventOfCodeOpts {
   case class DayOpts(
@@ -30,6 +31,7 @@ object AdventOfCodeOpts {
         case Day.MemoryReallocation => MemoryReallocation
         case Day.RecursiveCircus => RecursiveCircus
         case Day.IHeardYouLikeRegisters => IHeardYouLikeRegisters
+        case Day.StreamProcessing => StreamProcessing
       }
       if (verifySamples || inputOpt.isEmpty) {
         adventOfCodeDay.verifySampleCases()
@@ -54,6 +56,7 @@ object AdventOfCodeOpts {
     case object MemoryReallocation extends Day
     case object RecursiveCircus extends Day
     case object IHeardYouLikeRegisters extends Day
+    case object StreamProcessing extends Day
   }
 
   val optParser: OptionParser[DayOpts] = new OptionParser[DayOpts]("AdventOfCode") {
@@ -120,6 +123,12 @@ object AdventOfCodeOpts {
     cmd("day8")
       .action((_, c) => c.copy(day = Day.IHeardYouLikeRegisters))
       .text("  Day 8: I Heard You Like Registers")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
+
+    cmd("day9")
+      .action((_, c) => c.copy(day = Day.StreamProcessing))
+      .text("  Day 9: Stream Processing")
       .children(note(""), verifySamplesOpt, inputArg)
     note("")
 
