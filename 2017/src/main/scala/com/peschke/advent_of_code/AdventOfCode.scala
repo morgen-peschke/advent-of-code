@@ -11,6 +11,7 @@ import com.peschke.advent_of_code.day6.MemoryReallocation
 import com.peschke.advent_of_code.day7.RecursiveCircus
 import com.peschke.advent_of_code.day8.IHeardYouLikeRegisters
 import com.peschke.advent_of_code.day9.StreamProcessing
+import com.peschke.advent_of_code.day10.KnotHash
 
 object AdventOfCodeOpts {
   case class DayOpts(
@@ -23,15 +24,16 @@ object AdventOfCodeOpts {
         case Day.NoDayChosen =>
           throw new IllegalStateException("Should never reach this line of code")
 
-        case Day.InverseCaptcha => InverseCaptcha
-        case Day.CorruptionChecksum => CorruptionChecksum
-        case Day.SpiralMemory => SpiralMemory
+        case Day.InverseCaptcha         => InverseCaptcha
+        case Day.CorruptionChecksum     => CorruptionChecksum
+        case Day.SpiralMemory           => SpiralMemory
         case Day.HighEntropyPassphrases => HighEntropyPassphrases
-        case Day.TrampolineMaze => TrampolineMaze
-        case Day.MemoryReallocation => MemoryReallocation
-        case Day.RecursiveCircus => RecursiveCircus
+        case Day.TrampolineMaze         => TrampolineMaze
+        case Day.MemoryReallocation     => MemoryReallocation
+        case Day.RecursiveCircus        => RecursiveCircus
         case Day.IHeardYouLikeRegisters => IHeardYouLikeRegisters
-        case Day.StreamProcessing => StreamProcessing
+        case Day.StreamProcessing       => StreamProcessing
+        case Day.KnotHash               => KnotHash
       }
       if (verifySamples || inputOpt.isEmpty) {
         adventOfCodeDay.verifySampleCases()
@@ -47,16 +49,17 @@ object AdventOfCodeOpts {
 
   sealed trait Day
   object Day {
-    case object NoDayChosen extends Day
-    case object InverseCaptcha extends Day
-    case object CorruptionChecksum extends Day
-    case object SpiralMemory extends Day
+    case object NoDayChosen            extends Day
+    case object InverseCaptcha         extends Day
+    case object CorruptionChecksum     extends Day
+    case object SpiralMemory           extends Day
     case object HighEntropyPassphrases extends Day
-    case object TrampolineMaze extends Day
-    case object MemoryReallocation extends Day
-    case object RecursiveCircus extends Day
+    case object TrampolineMaze         extends Day
+    case object MemoryReallocation     extends Day
+    case object RecursiveCircus        extends Day
     case object IHeardYouLikeRegisters extends Day
-    case object StreamProcessing extends Day
+    case object StreamProcessing       extends Day
+    case object KnotHash               extends Day
   }
 
   val optParser: OptionParser[DayOpts] = new OptionParser[DayOpts]("AdventOfCode") {
@@ -129,6 +132,12 @@ object AdventOfCodeOpts {
     cmd("day9")
       .action((_, c) => c.copy(day = Day.StreamProcessing))
       .text("  Day 9: Stream Processing")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
+
+    cmd("day10")
+      .action((_, c) => c.copy(day = Day.KnotHash))
+      .text("  Day 10: Knot Hash")
       .children(note(""), verifySamplesOpt, inputArg)
     note("")
 
