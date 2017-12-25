@@ -12,6 +12,7 @@ import com.peschke.advent_of_code.day7.RecursiveCircus
 import com.peschke.advent_of_code.day8.IHeardYouLikeRegisters
 import com.peschke.advent_of_code.day9.StreamProcessing
 import com.peschke.advent_of_code.day10.KnotHash
+import com.peschke.advent_of_code.day11.HexEd
 
 object AdventOfCodeOpts {
   case class DayOpts(
@@ -34,6 +35,7 @@ object AdventOfCodeOpts {
         case Day.IHeardYouLikeRegisters => IHeardYouLikeRegisters
         case Day.StreamProcessing       => StreamProcessing
         case Day.KnotHash               => KnotHash
+        case Day.HexEd                  => HexEd
       }
       if (verifySamples || inputOpt.isEmpty) {
         adventOfCodeDay.verifySampleCases()
@@ -60,6 +62,7 @@ object AdventOfCodeOpts {
     case object IHeardYouLikeRegisters extends Day
     case object StreamProcessing       extends Day
     case object KnotHash               extends Day
+    case object HexEd                  extends Day
   }
 
   val optParser: OptionParser[DayOpts] = new OptionParser[DayOpts]("AdventOfCode") {
@@ -138,6 +141,12 @@ object AdventOfCodeOpts {
     cmd("day10")
       .action((_, c) => c.copy(day = Day.KnotHash))
       .text("  Day 10: Knot Hash")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
+
+    cmd("day11")
+      .action((_, c) => c.copy(day = Day.HexEd))
+      .text("  Day 11: Hex Ed")
       .children(note(""), verifySamplesOpt, inputArg)
     note("")
 
