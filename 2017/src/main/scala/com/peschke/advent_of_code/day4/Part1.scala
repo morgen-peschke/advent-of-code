@@ -1,7 +1,7 @@
 package com.peschke.advent_of_code
 package day4
 
-import scala.util.{Try, Failure}
+import scala.util.Try
 
 object Part1 {
   implicit class PassphraseOps(val p: Passphrase) extends AnyVal {
@@ -11,5 +11,5 @@ object Part1 {
   def validate(input: String): Try[Int] =
     HighEntropyPassphrases.parse(input).map { phrases =>
       phrases.count(_.isValid)
-    }.wrapFailure(throwable => Failure(new HighEntropyPassphrasesFailure(input, throwable)))
+    }.mapError(HighEntropyPassphrases, input)
 }

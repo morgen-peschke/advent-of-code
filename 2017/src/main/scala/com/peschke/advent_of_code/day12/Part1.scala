@@ -36,5 +36,5 @@ object Part1 {
     parse(input)
       .map(findConnections(program, _))
       .map(_.size)
-      .mapError(new DigitalPlumberFailure(input, _))
+      .mapError(DigitalPlumber, input)
 }

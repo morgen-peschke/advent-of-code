@@ -23,5 +23,5 @@ object Part2 {
     Part1.parse(input)
       .map(separateGroups)
       .map(_.size)
-      .mapError(new DigitalPlumberFailure(input, _))
+      .mapError(DigitalPlumber, input)
 }

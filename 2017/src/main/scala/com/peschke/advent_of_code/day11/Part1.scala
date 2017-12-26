@@ -13,5 +13,5 @@ object Part1 {
   def distanceAfter(input: String): Try[Int] =
     parse(input)
       .map(_.foldLeft(origin)(_ move _) distanceTo origin)
-      .mapError(new HexEdFailure(input, _))
+      .mapError(HexEd, input)
 }

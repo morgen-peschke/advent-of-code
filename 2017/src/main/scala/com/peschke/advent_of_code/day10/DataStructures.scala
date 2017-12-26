@@ -1,9 +1,6 @@
 package com.peschke.advent_of_code
 package day10
 
-class KnotHashFailure(input: String, cause: Throwable)
-    extends IllegalArgumentException(s"KnotHash failed on input:\n$input", cause)
-
 case class CircularBuffer[T](buffer: Vector[T]) extends (Int => T) {
   def wrapIndex(rawIndex: Int): Int = {
     require(rawIndex >= 0, "Negative indexes are not supported")

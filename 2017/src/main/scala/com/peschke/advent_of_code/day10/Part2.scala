@@ -39,5 +39,5 @@ object Part2 {
         .asDenseHash
         .render
       }
-      .mapError(new KnotHashFailure(input, _))
+      .mapError(KnotHash, input)
 }

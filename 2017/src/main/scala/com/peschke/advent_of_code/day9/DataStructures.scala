@@ -1,9 +1,6 @@
 package com.peschke.advent_of_code
 package day9
 
-class StreamProcessingFailure(input: String, cause: Throwable)
-    extends IllegalArgumentException(s"StreamProcessing failed on input:\n$input", cause)
-
 sealed trait Chunk
 object Chunk {
   case class Garbage(contents: String) extends Chunk

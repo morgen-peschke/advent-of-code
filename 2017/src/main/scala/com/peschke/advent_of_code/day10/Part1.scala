@@ -32,5 +32,5 @@ object Part1 {
         case a +: b +: _ => a * b
         case v => throw new NoSuchElementException(s"Result has less than two values: $v")
       }
-    }.mapError(new KnotHashFailure(input, _))
+    }.mapError(KnotHash, input)
 }

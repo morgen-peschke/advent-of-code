@@ -17,3 +17,6 @@ trait AdventOfCodeDay[P1, P2] {
   def verifyPart1Samples(): Unit
   def verifyPart2Samples(): Unit
 }
+
+class AdventOfCodeDayFailure(day: AdventOfCodeDay[_, _], input: String, cause: Throwable)
+    extends IllegalArgumentException(s"$day failed on input:\n$input", cause)

@@ -9,6 +9,6 @@ object Part2 {
       case Chunk.Garbage(content) => content.length
       case Chunk.Group(contents) => contents.map(calculateLength).sum
     }
-    Part1.parse(input).map(calculateLength).mapError(new StreamProcessingFailure(input, _))
+    Part1.parse(input).map(calculateLength).mapError(StreamProcessing, input)
   }
 }

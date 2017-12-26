@@ -1,8 +1,5 @@
 package com.peschke.advent_of_code.day3
 
-class SpiralMemoryFailure(input: String, cause: Throwable)
-    extends IllegalArgumentException(s"SpiralMemory failed on input:\n$input", cause)
-
 case class Steps(n: Int) {
   override def toString: String = s"$n steps"
 

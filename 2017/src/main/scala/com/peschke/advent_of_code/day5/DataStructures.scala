@@ -1,8 +1,5 @@
 package com.peschke.advent_of_code.day5
 
-class TrampolineMazeFailure(input: String, cause: Throwable)
-    extends IllegalArgumentException(s"Trampoline Maze failed on input:\n$input", cause)
-
 case class Instructions(jumpOffsets: Vector[Int], index: Int = 0) {
   def render(columnWidth: Option[Int] = None, limitToContext: Option[Int] = None): String = {
     val indexed = jumpOffsets.zipWithIndex

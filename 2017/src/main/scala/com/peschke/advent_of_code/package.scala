@@ -20,8 +20,7 @@ package object advent_of_code {
   }
 
   implicit class TryOpts[T](val t: Try[T]) extends AnyVal {
-    def wrapFailure(f: Throwable => Failure[T]): Try[T] = t.transform(Success(_), f)
-
-    def mapError(f: Throwable => Throwable): Try[T] = wrapFailure(t => Failure(f(t)))
+    def mapError(day: AdventOfCodeDay[_, _], input: String): Try[T] =
+      t.transform(Success(_), t => Failure(new AdventOfCodeDayFailure(day, input, t)))
   }
 }

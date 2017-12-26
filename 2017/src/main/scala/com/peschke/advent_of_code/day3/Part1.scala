@@ -1,7 +1,7 @@
 package com.peschke.advent_of_code
 package day3
 
-import scala.util.{Failure, Try}
+import scala.util.Try
 
 object Part1 {
   case class Level(n: Int, remainder: Double) {
@@ -117,5 +117,5 @@ object Part1 {
   def spiralMemory(input: String): Try[Steps] =
     SpiralMemory.parse(input).map { squareId =>
       calculateOffset(Square(squareId)).distance
-    }.wrapFailure(throwable => Failure(new SpiralMemoryFailure(input, throwable)))
+    }.mapError(SpiralMemory, input)
 }

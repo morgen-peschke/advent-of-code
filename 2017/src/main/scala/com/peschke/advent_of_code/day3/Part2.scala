@@ -1,7 +1,7 @@
 package com.peschke.advent_of_code
 package day3
 
-import scala.util.{Failure, Try}
+import scala.util.Try
 import Steps.syntax._
 
 object Part2 {
@@ -210,5 +210,5 @@ object Part2 {
         .dropWhile(_.data <= target)
         .headOption
         .fold(0)(_.data)
-    }.wrapFailure(throwable => Failure(new SpiralMemoryFailure(input, throwable)))
+    }.mapError(SpiralMemory, input)
 }

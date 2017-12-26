@@ -1,9 +1,6 @@
 package com.peschke.advent_of_code
 package day12
 
-class DigitalPlumberFailure(input: String, cause: Throwable)
-    extends IllegalArgumentException(s"DigitalPlumber failed on input:\n$input", cause)
-
 case class Program(label: String)
 object Program {
   implicit val ordering: Ordering[Program] = Ordering.by(_.label)

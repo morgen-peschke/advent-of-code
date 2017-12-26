@@ -2,9 +2,6 @@ package com.peschke.advent_of_code.day7
 
 import cats.data.NonEmptyList
 
-class RecursiveCircusFailure(input: String, cause: Throwable)
-    extends IllegalArgumentException(s"Recursive Circus failed on input:\n$input", cause)
-
 case class Name(n: String)
 
 case class ProgramInfo(name: Name, weight: Int, supporting: List[Name])

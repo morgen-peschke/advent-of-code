@@ -11,9 +11,6 @@ import cats.instances.int._
 
 import scala.util.Try
 
-class IHeardYouLikeRegistersFailure(input: String, cause: Throwable)
-    extends IllegalArgumentException(s"IHeardYouLikeRegisters failed on input:\n$input", cause)
-
 case class LineLocation(line: Int) {
   def desc: String = s"[Line $line]"
   def tokenNumber(index: Int): TokenLocation = TokenLocation(line, index)

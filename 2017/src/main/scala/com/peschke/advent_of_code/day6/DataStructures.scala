@@ -9,9 +9,6 @@ import cats.syntax.option._
 
 import cats.instances.int._
 
-class MemoryReallocationFailure(input: String, cause: Throwable)
-    extends IllegalArgumentException(s"Memory Reallocation failed on input:\n$input", cause)
-
 object Memory {
   case class Bank(blocks: Int) {
       def increment: Memory.Bank = Memory.Bank(blocks + 1)

@@ -1,7 +1,7 @@
 package com.peschke.advent_of_code
 package day5
 
-import scala.util.{Try, Failure}
+import scala.util.Try
 
 object Part1 {
   def followJumps(instructions: Instructions): Stream[Instructions] = {
@@ -20,5 +20,6 @@ object Part1 {
 
   def stepsUntilExit(input: String): Try[Int] =
     TrampolineMaze.parse(input).map(followJumps).map(_.length - 1)
-      .wrapFailure(throwable => Failure(new TrampolineMazeFailure(input, throwable)))
+      .mapError(TrampolineMaze, input)
+
 }

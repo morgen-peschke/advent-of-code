@@ -66,13 +66,15 @@ object IHeardYouLikeRegisters extends AdventOfCodeDay[Amount, Amount] {
   def compile(input: String): Try[List[Instruction]] = Instruction.compile(input) match {
     case Invalid(errors) =>
       val renderedErrors = errors.toList.mkString("\n")
-      Failure(new IHeardYouLikeRegistersFailure(
+      Failure(new AdventOfCodeDayFailure(
+        IHeardYouLikeRegisters,
         input,
         new IllegalArgumentException(s"Input failed to compile:\n$renderedErrors")
       ))
 
     case Valid(Nil) =>
-      Failure(new IHeardYouLikeRegistersFailure(
+      Failure(new AdventOfCodeDayFailure(
+        IHeardYouLikeRegisters,
         input,
         new IllegalArgumentException("Input compiled to empty list of instructions")))
 
@@ -83,10 +85,10 @@ object IHeardYouLikeRegisters extends AdventOfCodeDay[Amount, Amount] {
     amountOpt match {
       case Some(v) => Success(v)
       case None =>
-        Failure(
-          new IHeardYouLikeRegistersFailure(
-            input,
-            new NoSuchElementException("Memory was empty after evaluation")))
+        Failure(new AdventOfCodeDayFailure(
+          IHeardYouLikeRegisters,
+          input,
+          new NoSuchElementException("Memory was empty after evaluation")))
     }
 
   def runPart1(input: String): Try[Amount] =

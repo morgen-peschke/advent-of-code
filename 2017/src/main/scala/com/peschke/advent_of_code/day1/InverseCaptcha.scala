@@ -1,7 +1,7 @@
 package com.peschke.advent_of_code
 package day1
 
-import scala.util.{Failure, Try}
+import scala.util.Try
 
 import com.peschke.advent_of_code.AdventOfCodeDay
 
@@ -62,9 +62,6 @@ import com.peschke.advent_of_code.AdventOfCodeDay
   */
 object InverseCaptcha extends AdventOfCodeDay[Int, Int]{
 
-  class InverseCaptchaFailure(input: String, cause: Throwable)
-      extends IllegalArgumentException(s"InverseCaptcha failed on input:\n$input", cause)
-
   def runPart1(input: String): Try[Int] = inverseCaptchaPart1(input)
   def runPart2(input: String): Try[Int] = inverseCaptchaPart2(input)
 
@@ -84,7 +81,7 @@ object InverseCaptcha extends AdventOfCodeDay[Int, Int]{
           case (a, b) if a == b => a
         }
         .sum
-    }.wrapFailure(throwable => Failure(new InverseCaptchaFailure(input, throwable)))
+    }.mapError(InverseCaptcha, input)
 
   def inverseCaptchaPart2(input: String): Try[Int] =
     parse(input).map { digits =>
@@ -97,7 +94,7 @@ object InverseCaptcha extends AdventOfCodeDay[Int, Int]{
           case (a, b) if a == b => a
         }
         .sum
-    }.wrapFailure(throwable => Failure(new InverseCaptchaFailure(input, throwable)))
+    }.mapError(InverseCaptcha, input)
 
   def verifyPart1Samples(): Unit = {
     Seq(

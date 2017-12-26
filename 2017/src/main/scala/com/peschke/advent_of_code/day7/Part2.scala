@@ -84,5 +84,5 @@ object Part2 {
           }
           unbalanced.weight + unbalanced.delta
         }
-      }.mapError(new RecursiveCircusFailure(input, _))
+      }.mapError(RecursiveCircus, input)
 }

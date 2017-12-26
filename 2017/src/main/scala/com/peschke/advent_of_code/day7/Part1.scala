@@ -45,6 +45,5 @@ object Part1 {
       .parse(input)
       .flatMap(buildTree)
       .map(_.name)
-      .mapError(new RecursiveCircusFailure(input, _))
-
+      .mapError(RecursiveCircus, input)
 }

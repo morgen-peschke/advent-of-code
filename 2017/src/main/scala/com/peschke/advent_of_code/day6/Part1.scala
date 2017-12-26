@@ -8,7 +8,9 @@ object Part1 {
     def loop(prev: Memory.Region, seen: Set[Memory.Region]): Try[Int] =
       prev.reallocate match {
         case None => Failure(
-          new MemoryReallocationFailure(input,
+          new AdventOfCodeDayFailure(
+            MemoryReallocation,
+            input,
             new NoSuchElementException(s"Unable to reallocate $prev")))
         case Some(current) if seen.contains(current) => Success(seen.size)
         case Some(current) => loop(current, seen + current)
@@ -17,5 +19,5 @@ object Part1 {
     MemoryReallocation.parse(input).flatMap { region =>
       loop(region, Set(region))
     }
-  }.mapError(new MemoryReallocationFailure(input, _))
+  }.mapError(MemoryReallocation, input)
 }

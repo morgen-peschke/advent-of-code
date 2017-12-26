@@ -1,7 +1,7 @@
 package com.peschke.advent_of_code
 package day2
 
-import scala.util.{Try, Failure}
+import scala.util.Try
 
 import com.peschke.advent_of_code.AdventOfCodeDay
 
@@ -67,9 +67,6 @@ import com.peschke.advent_of_code.AdventOfCodeDay
   */
 object CorruptionChecksum extends AdventOfCodeDay[Int, Int] {
 
-  class CorruptionChecksumFailure(input: String, cause: Throwable)
-      extends IllegalStateException(s"CorruptionChecksum failed on input:\n$input", cause)
-
   def runPart1(input: String): Try[Int] = checksum(input)
   def runPart2(input: String): Try[Int] = rowResults(input)
 
@@ -81,7 +78,7 @@ object CorruptionChecksum extends AdventOfCodeDay[Int, Int] {
       _.map { row =>
         row.max - row.min
       }.sum
-    }.wrapFailure(throwable => Failure(new CorruptionChecksumFailure(input, throwable)))
+    }.mapError(CorruptionChecksum, input)
 
   def rowResults(input: String): Try[Int] =
     parse(input).map {
@@ -97,7 +94,7 @@ object CorruptionChecksum extends AdventOfCodeDay[Int, Int] {
             case (number, divisor) => number / divisor
           }
       }.sum
-    }.wrapFailure(throwable => Failure(new CorruptionChecksumFailure(input, throwable)))
+    }.mapError(CorruptionChecksum, input)
 
   def verifyPart1Samples(): Unit = {
     println(verifyResult(checksum _)(

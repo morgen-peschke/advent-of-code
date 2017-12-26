@@ -14,5 +14,5 @@ object Part2 {
           (newLocation, maxDistance.max(newLocation.distanceTo(origin)))
       })
       .map(_._2)
-      .mapError(new HexEdFailure(input, _))
+      .mapError(HexEd, input)
 }

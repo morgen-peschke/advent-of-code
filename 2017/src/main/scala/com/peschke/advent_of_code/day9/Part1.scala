@@ -70,6 +70,6 @@ object Part1 {
       case Chunk.Group(contents) =>
         contents.map(calculateScore(_: Chunk, depth + 1)).sum + depth
     }
-    parse(input).map(calculateScore(_: Chunk)).mapError(new StreamProcessingFailure(input, _))
+    parse(input).map(calculateScore(_: Chunk)).mapError(StreamProcessing, input)
   }
 }

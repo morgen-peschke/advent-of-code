@@ -1,9 +1,6 @@
 package com.peschke.advent_of_code
 package day11
 
-class HexEdFailure(input: String, cause: Throwable)
-    extends IllegalArgumentException(s"HexEd failed on input:\n$input", cause)
-
 sealed trait Direction
 object Direction {
   case object North     extends Direction
