@@ -14,6 +14,7 @@ import com.peschke.advent_of_code.day9.StreamProcessing
 import com.peschke.advent_of_code.day10.KnotHash
 import com.peschke.advent_of_code.day11.HexEd
 import com.peschke.advent_of_code.day12.DigitalPlumber
+import com.peschke.advent_of_code.day13.PacketScanners
 
 object AdventOfCodeOpts {
   case class DayOpts(
@@ -38,6 +39,7 @@ object AdventOfCodeOpts {
         case Day.KnotHash               => KnotHash
         case Day.HexEd                  => HexEd
         case Day.DigitalPlumber         => DigitalPlumber
+        case Day.PacketScanners         => PacketScanners
       }
       if (verifySamples || inputOpt.isEmpty) {
         adventOfCodeDay.verifySampleCases()
@@ -66,6 +68,7 @@ object AdventOfCodeOpts {
     case object KnotHash               extends Day
     case object HexEd                  extends Day
     case object DigitalPlumber         extends Day
+    case object PacketScanners         extends Day
   }
 
   val optParser: OptionParser[DayOpts] = new OptionParser[DayOpts]("AdventOfCode") {
@@ -156,6 +159,12 @@ object AdventOfCodeOpts {
     cmd("day12")
       .action((_, c) => c.copy(day = Day.DigitalPlumber))
       .text("  Day 12: Digital Plumber")
+      .children(note(""), verifySamplesOpt, inputArg)
+    note("")
+
+    cmd("day13")
+      .action((_, c) => c.copy(day = Day.PacketScanners))
+      .text("  Day 13: Packet Scanners")
       .children(note(""), verifySamplesOpt, inputArg)
     note("")
 
