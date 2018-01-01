@@ -20,7 +20,7 @@ package object advent_of_code {
   }
 
   implicit class TryOpts[T](val t: Try[T]) extends AnyVal {
-    def mapError(day: AdventOfCodeDay[_, _], input: String): Try[T] =
+    def mapError(day: AdventOfCodeDay, input: String): Try[T] =
       t.transform(Success(_), t => Failure(new AdventOfCodeDayFailure(day, input, t)))
   }
 }

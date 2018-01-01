@@ -81,7 +81,10 @@ import scala.util.Try
   * How many cycles are in the infinite loop that arises from the
   * configuration in your puzzle input?
   */
-object MemoryReallocation extends AdventOfCodeDay[Int, Int] {
+object MemoryReallocation extends AdventOfCodeDay {
+  type P1 = Int
+  type P2 = Int
+
   def parse(input: String): Try[Memory.Region] = Try {
     Memory.Region(
       NonEmptyVector.fromVectorUnsafe(

@@ -118,7 +118,10 @@ import scala.util.Try
   * Given that exactly one program is the wrong weight, what would its
   * weight need to be to balance the entire tower?
   */
-object RecursiveCircus extends AdventOfCodeDay[Name, Int] {
+object RecursiveCircus extends AdventOfCodeDay {
+  type P1 = Name
+  type P2 = Int
+
   def runPart1(input: String): Try[Name] = Part1.whoIsOnBottom(input)
   def runPart2(input: String): Try[Int] = Part2.findCorrectWeightForUnbalanced(input)
 

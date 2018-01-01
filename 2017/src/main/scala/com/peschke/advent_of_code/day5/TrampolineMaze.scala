@@ -68,7 +68,9 @@ import scala.util.Try
   *
   * How many steps does it now take to reach the exit?
   */
-object TrampolineMaze extends AdventOfCodeDay[Int, Int] {
+object TrampolineMaze extends AdventOfCodeDay {
+  type P1 = Int
+  type P2 = Int
 
   def runPart1(input: String): Try[Int] = Part1.stepsUntilExit(input)
   def runPart2(input: String): Try[Int] = Part2.stepsUntilExit(input)

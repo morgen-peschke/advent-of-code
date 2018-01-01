@@ -62,7 +62,10 @@ import scala.util.{Try, Failure, Success}
   * instructions, the highest value ever held was 10 (in register c
   * after the third instruction was evaluated).
   */
-object IHeardYouLikeRegisters extends AdventOfCodeDay[Amount, Amount] {
+object IHeardYouLikeRegisters extends AdventOfCodeDay {
+  type P1 = Amount
+  type P2 = Amount
+
   def compile(input: String): Try[List[Instruction]] = Instruction.compile(input) match {
     case Invalid(errors) =>
       val renderedErrors = errors.toList.mkString("\n")

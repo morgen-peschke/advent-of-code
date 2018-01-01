@@ -65,7 +65,9 @@ import com.peschke.advent_of_code.AdventOfCodeDay
   * - In the third row, the result is 2.
   * - In this example, the sum of the results would be 4 + 3 + 2 = 9.
   */
-object CorruptionChecksum extends AdventOfCodeDay[Int, Int] {
+object CorruptionChecksum extends AdventOfCodeDay {
+  type P1 = Int
+  type P2 = Int
 
   def runPart1(input: String): Try[Int] = checksum(input)
   def runPart2(input: String): Try[Int] = rowResults(input)

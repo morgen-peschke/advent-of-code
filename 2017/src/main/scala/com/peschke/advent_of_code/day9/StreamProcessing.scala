@@ -98,7 +98,10 @@ import com.peschke.advent_of_code.AdventOfCodeDay
   *
   * How many non-canceled characters are within the garbage in your puzzle input?
   */
-object StreamProcessing extends AdventOfCodeDay[Int, Int]{
+object StreamProcessing extends AdventOfCodeDay {
+  type P1 = Int
+  type P2 = Int
+
   def runPart1(input: String): Try[Int] = Part1.totalScore(input)
   def runPart2(input: String): Try[Int] = Part2.garbageLength(input)
 

@@ -47,7 +47,9 @@ import com.peschke.advent_of_code.AdventOfCodeDay
   *
   * Under this new system policy, how many passphrases are valid?
   */
-object HighEntropyPassphrases extends AdventOfCodeDay[Int, Int] {
+object HighEntropyPassphrases extends AdventOfCodeDay {
+  type P1 = Int
+  type P2 = Int
 
   def runPart1(input: String): scala.util.Try[Int] = Part1.validate(input)
   def runPart2(input: String): scala.util.Try[Int] = Part2.validate(input)

@@ -60,7 +60,9 @@ import com.peschke.advent_of_code.AdventOfCodeDay
   * - 123123 produces 12.
   * - 12131415 produces 4.
   */
-object InverseCaptcha extends AdventOfCodeDay[Int, Int]{
+object InverseCaptcha extends AdventOfCodeDay {
+  type P1 = Int
+  type P2 = Int
 
   def runPart1(input: String): Try[Int] = inverseCaptchaPart1(input)
   def runPart2(input: String): Try[Int] = inverseCaptchaPart2(input)

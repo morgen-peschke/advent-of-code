@@ -164,7 +164,10 @@ import scala.util.Try
   * is the Knot Hash of your puzzle input? Ignore any leading or
   * trailing whitespace you might encounter.
   */
-object KnotHash extends AdventOfCodeDay[Int, RenderedHash] {
+object KnotHash extends AdventOfCodeDay {
+  type P1 = Int
+  type P2 = RenderedHash
+
   def runPart1(input: String): Try[Int] = Part1.verifyHash(input)
   def runPart2(input: String): Try[RenderedHash] = Part2.hash(input)
 

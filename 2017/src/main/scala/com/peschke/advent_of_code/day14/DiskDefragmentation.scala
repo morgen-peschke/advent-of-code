@@ -91,7 +91,10 @@ import scala.util.Try
   *
   * How many regions are present given your key string?
   */
-object DiskDefragmentation extends AdventOfCodeDay[Int, Int] {
+object DiskDefragmentation extends AdventOfCodeDay {
+  type P1 = Int
+  type P2 = Int
+
   def runPart1(input: String): Try[Int] = Part1.usedSquares(input)
   def runPart2(input: String): Try[Int] = Part2.regions(input)
 

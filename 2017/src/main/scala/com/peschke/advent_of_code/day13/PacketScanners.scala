@@ -338,7 +338,10 @@ import scala.util.Try
   * What is the fewest number of picoseconds that you need to delay
   * the packet to pass through the firewall without being caught?
   */
-object PacketScanners extends AdventOfCodeDay[Severity, Delay] {
+object PacketScanners extends AdventOfCodeDay {
+  type P1 = Severity
+  type P2 = Delay
+
   def runPart1(input: String): Try[Severity] = Part1.traverseFirewall(input)
   def runPart2(input: String): Try[Delay] = Part2.traverseFirewallSafely(input)
 

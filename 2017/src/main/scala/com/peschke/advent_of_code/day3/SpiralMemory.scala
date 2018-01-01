@@ -75,7 +75,9 @@ import Steps.syntax._
   * What is the first value written that is larger than your puzzle
   * input?
   */
-object SpiralMemory extends AdventOfCodeDay[Steps, Int] {
+object SpiralMemory extends AdventOfCodeDay {
+  type P1 = Steps
+  type P2 = Int
 
   def parse(input: String): Try[Int] = Try(input.toInt)
 

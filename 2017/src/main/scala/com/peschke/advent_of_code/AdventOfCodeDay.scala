@@ -2,13 +2,37 @@ package com.peschke.advent_of_code
 
 import scala.util.Try
 
-trait AdventOfCodeDay[P1, P2] {
-  def verifySampleCases(): Unit = {
-    println("Checking part 1 sample cases")
-    verifyPart1Samples()
+trait AdventOfCodeDay {
+  type P1
+  type P2
 
-    println("\nChecking part 2 sample cases")
-    verifyPart2Samples()
+  lazy val name: String = {
+    val raw = {
+      val simpleName = getClass.getSimpleName
+      simpleName.split('$').lastOption.getOrElse(simpleName)
+    }
+    raw.toList.sliding(2).flatMap {
+      case h :: t :: Nil if h.isLower && t.isUpper => List(h, ' ')
+      case h :: _ => List(h)
+    }.mkString + raw.lastOption.fold("")(_.toString)
+  }
+
+  def verifySampleCases(skipPart1: Boolean = false, skipPart2: Boolean = false): Unit = {
+    if (skipPart1) {
+      println("Skipping part 1 sample cases")
+    }
+    else {
+      println("Checking part 1 sample cases")
+      verifyPart1Samples()
+    }
+
+    if (skipPart2) {
+      println("Skipping part 2 sample cases")
+    }
+    else {
+      println("\nChecking part 2 sample cases")
+      verifyPart2Samples()
+    }
   }
 
   def runPart1(input: String): Try[P1]
@@ -18,5 +42,24 @@ trait AdventOfCodeDay[P1, P2] {
   def verifyPart2Samples(): Unit
 }
 
-class AdventOfCodeDayFailure(day: AdventOfCodeDay[_, _], input: String, cause: Throwable)
+object AdventOfCodeDay {
+  val all: Seq[AdventOfCodeDay] =
+    Seq(
+      com.peschke.advent_of_code.day1.InverseCaptcha,
+      com.peschke.advent_of_code.day2.CorruptionChecksum,
+      com.peschke.advent_of_code.day3.SpiralMemory,
+      com.peschke.advent_of_code.day4.HighEntropyPassphrases,
+      com.peschke.advent_of_code.day5.TrampolineMaze,
+      com.peschke.advent_of_code.day6.MemoryReallocation,
+      com.peschke.advent_of_code.day7.RecursiveCircus,
+      com.peschke.advent_of_code.day8.IHeardYouLikeRegisters,
+      com.peschke.advent_of_code.day9.StreamProcessing,
+      com.peschke.advent_of_code.day10.KnotHash,
+      com.peschke.advent_of_code.day11.HexEd,
+      com.peschke.advent_of_code.day12.DigitalPlumber,
+      com.peschke.advent_of_code.day13.PacketScanners,
+      com.peschke.advent_of_code.day14.DiskDefragmentation)
+}
+
+class AdventOfCodeDayFailure(day: AdventOfCodeDay, input: String, cause: Throwable)
     extends IllegalArgumentException(s"$day failed on input:\n$input", cause)

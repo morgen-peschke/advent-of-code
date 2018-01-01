@@ -48,7 +48,10 @@ import scala.util.Try
   *
   * How many steps away is the furthest he ever got from his starting position?
   */
-object HexEd extends AdventOfCodeDay[Int, Int] {
+object HexEd extends AdventOfCodeDay {
+  type P1 = Int
+  type P2 = Int
+
   def runPart1(input: String): Try[Int] = Part1.distanceAfter(input)
   def runPart2(input: String): Try[Int] = Part2.maxDistanceDuring(input)
 

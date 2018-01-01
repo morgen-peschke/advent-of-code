@@ -2,183 +2,110 @@ package com.peschke.advent_of_code
 
 import scopt.OptionParser
 
-import com.peschke.advent_of_code.day1.InverseCaptcha
-import com.peschke.advent_of_code.day2.CorruptionChecksum
-import com.peschke.advent_of_code.day3.SpiralMemory
-import com.peschke.advent_of_code.day4.HighEntropyPassphrases
-import com.peschke.advent_of_code.day5.TrampolineMaze
-import com.peschke.advent_of_code.day6.MemoryReallocation
-import com.peschke.advent_of_code.day7.RecursiveCircus
-import com.peschke.advent_of_code.day8.IHeardYouLikeRegisters
-import com.peschke.advent_of_code.day9.StreamProcessing
-import com.peschke.advent_of_code.day10.KnotHash
-import com.peschke.advent_of_code.day11.HexEd
-import com.peschke.advent_of_code.day12.DigitalPlumber
-import com.peschke.advent_of_code.day13.PacketScanners
-import com.peschke.advent_of_code.day14.DiskDefragmentation
-
 object AdventOfCodeOpts {
   case class DayOpts(
-    day: Day = Day.NoDayChosen,
+    day: Option[AdventOfCodeDay] = None,
     inputOpt: Option[Input] = None,
-    verifySamples: Boolean = false) {
+    verifySamples: Boolean = false,
+    skipPart1: Boolean = false,
+    skipPart2: Boolean = false
+  ) {
+
+    def withDay(d: AdventOfCodeDay): DayOpts = copy(day = Some(d))
 
     def run(): Unit = {
-      val adventOfCodeDay = day match {
-        case Day.NoDayChosen =>
-          throw new IllegalStateException("Should never reach this line of code")
-
-        case Day.InverseCaptcha         => InverseCaptcha
-        case Day.CorruptionChecksum     => CorruptionChecksum
-        case Day.SpiralMemory           => SpiralMemory
-        case Day.HighEntropyPassphrases => HighEntropyPassphrases
-        case Day.TrampolineMaze         => TrampolineMaze
-        case Day.MemoryReallocation     => MemoryReallocation
-        case Day.RecursiveCircus        => RecursiveCircus
-        case Day.IHeardYouLikeRegisters => IHeardYouLikeRegisters
-        case Day.StreamProcessing       => StreamProcessing
-        case Day.KnotHash               => KnotHash
-        case Day.HexEd                  => HexEd
-        case Day.DigitalPlumber         => DigitalPlumber
-        case Day.PacketScanners         => PacketScanners
-        case Day.DiskDefragmentation    => DiskDefragmentation
+      val adventOfCodeDay = day.getOrElse {
+        throw new IllegalStateException("Should never reach this line of code")
       }
       if (verifySamples || inputOpt.isEmpty) {
-        adventOfCodeDay.verifySampleCases()
+        adventOfCodeDay.verifySampleCases(skipPart1, skipPart2)
         inputOpt.foreach(_ => println())
       }
       inputOpt.foreach { input =>
         val trimmed = input.contents.trim
-        println(s"Part 1: ${adventOfCodeDay.runPart1(trimmed).get}")
-        println(s"Part 2: ${adventOfCodeDay.runPart2(trimmed).get}")
+        if (skipPart1) {
+          println("Part 1: [Skipped]")
+        }
+        else {
+          println(s"Part 1: ${adventOfCodeDay.runPart1(trimmed).get}")
+        }
+
+        if (skipPart2) {
+          println("Part 2: [Skipped]")
+        }
+        else {
+          println(s"Part 2: ${adventOfCodeDay.runPart2(trimmed).get}")
+        }
       }
     }
-  }
-
-  sealed trait Day
-  object Day {
-    case object NoDayChosen            extends Day
-    case object InverseCaptcha         extends Day
-    case object CorruptionChecksum     extends Day
-    case object SpiralMemory           extends Day
-    case object HighEntropyPassphrases extends Day
-    case object TrampolineMaze         extends Day
-    case object MemoryReallocation     extends Day
-    case object RecursiveCircus        extends Day
-    case object IHeardYouLikeRegisters extends Day
-    case object StreamProcessing       extends Day
-    case object KnotHash               extends Day
-    case object HexEd                  extends Day
-    case object DigitalPlumber         extends Day
-    case object PacketScanners         extends Day
-    case object DiskDefragmentation    extends Day
   }
 
   val optParser: OptionParser[DayOpts] = new OptionParser[DayOpts]("AdventOfCode") {
     head("AdventOfCode", "2017")
 
-    note("http://adventofcode.com/2017")
+    note("http://adventofcode.com/2017\n")
 
-    def verifySamplesOpt =
+    def verifyOpt =
       opt[Unit]("verify")
         .text("verify the sample input, defaults to false unless no arguments are given")
         .optional
-        .maxOccurs(1)
         .action((_, c) => c.copy(verifySamples = true))
 
+    def skipOpt =
+      opt[Int]("skip")
+        .valueName("1|2")
+        .text("Skip either part 1 or part 2")
+        .optional
+        .action((v, c) => v match {
+          case 1 => c.copy(skipPart1 = true)
+          case 2 => c.copy(skipPart2 = true)
+          case _ => throw new IllegalArgumentException(s"Expected '1' or '2'")
+        })
+
     def inputArg =
-      arg[Input]("<input>")
-        .text("run on this input, can be '-' for stdin, a file url (file://...), or simply text")
+      arg[Input]("input")
+        .text {
+          "run on this input, " +
+            "can be '-' for stdin, " +
+            "a file url (file://...), or simply text"
+        }
         .optional
         .maxOccurs(1)
         .action((i, c) => c.copy(inputOpt = Some(i)))
 
-    cmd("day1")
-      .action((_, c) => c.copy(day = Day.InverseCaptcha))
-      .text("  Day 1: Inverse Captcha")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
+    def dayOpts[T](showSummary: Boolean) =
+      if (showSummary)
+        Seq(
+          verifyOpt.hidden(),
+          skipOpt.hidden(),
+          inputArg.hidden()
+        )
+      else
+        Seq(
+          note(""),
+          note("These options are standard to all day* commands:"),
+          verifyOpt,
+          skipOpt,
+          inputArg
+        )
 
-    cmd("day2")
-      .action((_, c) => c.copy(day = Day.CorruptionChecksum))
-      .text("  Day 2: Corruption Checksum")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
+    AdventOfCodeDay.all.zipWithIndex.foreach {
+      case (day, zeroBasedIndex) =>
+        val index = zeroBasedIndex + 1
 
-    cmd("day3")
-      .action((_, c) => c.copy(day = Day.SpiralMemory))
-      .text("  Day 3: Spiral Memory")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
+        cmd(s"day$index")
+          .action((_, c) => c.withDay(day))
+          .text(s"  Day $index: ${day.name}")
+          .children(dayOpts(zeroBasedIndex != 0):_ *)
+        note("")
+    }
 
-    cmd("day4")
-      .action((_, c) => c.copy(day = Day.HighEntropyPassphrases))
-      .text("  Day 4: High-Entropy Passphrases")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
-
-    cmd("day5")
-      .action((_, c) => c.copy(day = Day.TrampolineMaze))
-      .text("  Day 5: A Maze of Twisty Trampolines, All Alike")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
-
-    cmd("day6")
-      .action((_, c) => c.copy(day = Day.MemoryReallocation))
-      .text("  Day 6: Memory Reallocation")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
-
-    cmd("day7")
-      .action((_, c) => c.copy(day = Day.RecursiveCircus))
-      .text("  Day 7: Recursive Circus")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
-
-    cmd("day8")
-      .action((_, c) => c.copy(day = Day.IHeardYouLikeRegisters))
-      .text("  Day 8: I Heard You Like Registers")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
-
-    cmd("day9")
-      .action((_, c) => c.copy(day = Day.StreamProcessing))
-      .text("  Day 9: Stream Processing")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
-
-    cmd("day10")
-      .action((_, c) => c.copy(day = Day.KnotHash))
-      .text("  Day 10: Knot Hash")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
-
-    cmd("day11")
-      .action((_, c) => c.copy(day = Day.HexEd))
-      .text("  Day 11: Hex Ed")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
-
-    cmd("day12")
-      .action((_, c) => c.copy(day = Day.DigitalPlumber))
-      .text("  Day 12: Digital Plumber")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
-
-    cmd("day13")
-      .action((_, c) => c.copy(day = Day.PacketScanners))
-      .text("  Day 13: Packet Scanners")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
-
-    cmd("day14")
-      .action((_, c) => c.copy(day = Day.DiskDefragmentation))
-      .text("  Day 14: Disk Defragmentation")
-      .children(note(""), verifySamplesOpt, inputArg)
-    note("")
+    help("help")
 
     checkConfig {
-      case DayOpts(Day.NoDayChosen, _, _) => failure("No day chosen")
+      case DayOpts(None, _, _, _, _) => failure("No day chosen")
+      case DayOpts(Some(day), _, _, true, true) =>
+        failure(s"Cannot skip both parts 1 & 2 of ${day.name}")
       case _ => success
     }
   }

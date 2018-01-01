@@ -77,7 +77,10 @@ import scala.util.Try
   *
   * How many groups are there in total?
   */
-object DigitalPlumber extends AdventOfCodeDay[Int, Int] {
+object DigitalPlumber extends AdventOfCodeDay {
+  type P1 = Int
+  type P2 = Int
+
   def runPart1(input: String): Try[Int] = Part1.numberOfConnections(Program("0"), input)
   def runPart2(input: String): Try[Int] = Part2.countGroups(input)
 
