@@ -46,6 +46,6 @@ case class DenseHash(bytes: Vector[Int]) {
   require(bytes.length == 16, s"Dense hash must be 16 bytes long: $bytes")
 }
 
-case class RenderedHash(hash: String) extends AnyVal {
+case class RenderedHash(hash: String) {
   override def toString: String = hash
 }
