@@ -6,6 +6,12 @@ trait AdventOfCodeDay {
   type P1
   type P2
 
+  def runPart1(input: String): Try[P1]
+  def runPart2(input: String): Try[P2]
+
+  def verifyPart1Samples(): Unit
+  def verifyPart2Samples(): Unit
+
   lazy val name: String = {
     val raw = {
       val simpleName = getClass.getSimpleName
@@ -34,12 +40,6 @@ trait AdventOfCodeDay {
       verifyPart2Samples()
     }
   }
-
-  def runPart1(input: String): Try[P1]
-  def runPart2(input: String): Try[P2]
-
-  def verifyPart1Samples(): Unit
-  def verifyPart2Samples(): Unit
 }
 
 object AdventOfCodeDay {
@@ -58,7 +58,9 @@ object AdventOfCodeDay {
       com.peschke.advent_of_code.day11.HexEd,
       com.peschke.advent_of_code.day12.DigitalPlumber,
       com.peschke.advent_of_code.day13.PacketScanners,
-      com.peschke.advent_of_code.day14.DiskDefragmentation)
+      com.peschke.advent_of_code.day14.DiskDefragmentation,
+      com.peschke.advent_of_code.day15.DuelingGenerators
+    )
 }
 
 class AdventOfCodeDayFailure(day: AdventOfCodeDay, input: String, cause: Throwable)
