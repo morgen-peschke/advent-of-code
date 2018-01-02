@@ -19,17 +19,9 @@ object Pipe {
 
 object Parser {
   import fastparse.all._
-  import fastparse.core.Parsed
 
   val program: P[Program] = P(CharIn('0' to '9').rep.!.map(Program(_)))
   val sep: P[Unit] = P(" <-> ")
   val programAndConnections: P[(Program, Seq[Program])] =
     P(program ~/ sep ~/ program.rep(sep = ", "))
-
-  def parse(input: String): (Program, Seq[Program]) =
-    programAndConnections.parse(input) match {
-      case Parsed.Success(value, _) => value
-      case f @ Parsed.Failure(_, _, _) =>
-        throw new IllegalArgumentException(s"Unable to parse <$input>\n${f.msg}")
-    }
 }

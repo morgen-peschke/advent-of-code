@@ -3,17 +3,24 @@ package day12
 
 import scala.util.Try
 
+import cats.instances.try_._
+import cats.instances.vector._
+
+import cats.syntax.traverse._
+
 object Part1 {
-  def parse(input: String): Try[Seq[Pipe]] = Try {
+  def parse(input: String): Try[Seq[Pipe]] =
     input.split('\n')
       .toVector
-      .map(Parser.parse)
-      .flatMap {
-        case (program, connections) => connections.map(Pipe(program, _))
+      .traverse(Parser.programAndConnections.tryToParse)
+      .map { programsAndConnections =>
+        programsAndConnections
+          .flatMap {
+            case (program, connections) => connections.map(Pipe(program, _))
+          }
+          .distinct
+          .sorted
       }
-      .distinct
-      .sorted
-  }
 
   def findConnections(root: Program, pipes: Seq[Pipe]): Set[Program] = {
     def loop(p: Program, accum: Set[Program]): Set[Program] = {
