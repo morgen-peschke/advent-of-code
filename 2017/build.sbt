@@ -20,7 +20,9 @@ lazy val root = (project in file("."))
       "-Ywarn-value-discard",
       "-Xfatal-warnings"),
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-core" % "1.0.0-MF",
-      "com.github.scopt" %% "scopt" % "3.7.0",
-      "com.lihaoyi" %% "fastparse" % "1.0.0"
+      "org.typelevel"    %% "cats-core"    % "1.0.0-MF",
+      "com.github.scopt" %% "scopt"        % "3.7.0",
+      "com.lihaoyi"      %% "fastparse"    % "1.0.0",
+      "eu.timepit"       %% "refined"      % "0.8.6",
+      "eu.timepit"       %% "refined-cats" % "0.8.6"
     ))

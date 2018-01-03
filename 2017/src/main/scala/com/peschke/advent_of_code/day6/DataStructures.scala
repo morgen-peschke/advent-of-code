@@ -3,7 +3,6 @@ package com.peschke.advent_of_code.day6
 import cats.kernel.Order
 import cats.data.NonEmptyVector
 
-import cats.syntax.traverse._
 import cats.syntax.reducible._
 import cats.syntax.option._
 

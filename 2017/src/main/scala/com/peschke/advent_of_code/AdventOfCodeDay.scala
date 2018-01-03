@@ -59,9 +59,29 @@ object AdventOfCodeDay {
       com.peschke.advent_of_code.day12.DigitalPlumber,
       com.peschke.advent_of_code.day13.PacketScanners,
       com.peschke.advent_of_code.day14.DiskDefragmentation,
-      com.peschke.advent_of_code.day15.DuelingGenerators
+      com.peschke.advent_of_code.day15.DuelingGenerators,
+      com.peschke.advent_of_code.day16.PermutationPromenade
     )
 }
 
 class AdventOfCodeDayFailure(day: AdventOfCodeDay, input: String, cause: Throwable)
     extends IllegalArgumentException(s"$day failed on input:\n$input", cause)
+
+sealed trait Result {
+  def render: String
+}
+object Result {
+  case object Pass extends Result {
+    def render: String = "[Pass]"
+  }
+
+  case class Fail[A](actual: A, expected: A) extends Result {
+    def render: String = s"[Fail] returned $actual, but expected $expected"
+  }
+
+  case class Abort[T <: Throwable](exception: T) extends Result {
+    def render: String =
+      s"""|[Fail] threw an exception:
+          |$exception""".stripMargin
+  }
+}

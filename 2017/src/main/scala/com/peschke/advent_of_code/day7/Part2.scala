@@ -2,6 +2,7 @@ package com.peschke.advent_of_code
 package day7
 
 import cats.syntax.option._
+import cats.instances.int._
 
 import scala.util.Try
 
