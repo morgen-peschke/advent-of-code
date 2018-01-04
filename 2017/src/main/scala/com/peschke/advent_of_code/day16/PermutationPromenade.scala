@@ -43,16 +43,34 @@ import eu.timepit.refined.refineMV
   * You watch the dance for a while and record their dance moves (your
   * puzzle input). In what order are the programs standing after their
   * dance?
+  *
+  * --- Part Two ---
+  *
+  * Now that you're starting to get a feel for the dance moves, you
+  * turn your attention to the dance as a whole.
+  *
+  * Keeping the positions they ended up in from their previous dance,
+  * the programs perform it again and again: including the first
+  * dance, a total of one billion (1000000000) times.
+  *
+  * In the example above, their second dance would begin with the
+  * order baedc, and use the same dance moves:
+  *
+  * s1, a spin of size 1: cbaed.
+  * x3/4, swapping the last two programs: cbade.
+  * pe/b, swapping programs e and b: ceadb.
+  *
+  * In what order are the programs standing after their billion dances?
   */
 object PermutationPromenade extends AdventOfCodeDay {
   type P1 = Part1.ErrorMsgOr[String]
-  type P2 = Nothing
+  type P2 = Part1.ErrorMsgOr[String]
 
   def runPart1(input: String): Try[P1] = Part1.dance(input).map(_.map(_.render))
-  def runPart2(input: String): Try[P2] = ???
+  def runPart2(input: String): Try[P2] = Part2.dance(input).map(_.map(_.render))
 
   def verifyPart1Samples(): Unit = {
-    import Part1.DanceMoveOps
+    import Part1.DanceLineOps
 
     println("--- parsing ---")
     Seq(
@@ -74,14 +92,21 @@ object PermutationPromenade extends AdventOfCodeDay {
       ).foldLeft(initial) {
         case (l @ Left(_), _) => l
         case (Right(danceLine), (step, expected)) =>
-          val result = step.applyTo(danceLine)
-          println(result.map(_.render).asResult(expected).render)
-          result
+          val result = danceLine.dance(step)
+          println(result.render.asRight.asResult(expected).render)
+          result.asRight
       }
     println(finalResult.map(_.render).asResult("[baedc]").render)
 
     println(verifyResult(Part1.dance(_: String, initial))("s1,x3/4,pe/b", finalResult))
   }
 
-  def verifyPart2Samples(): Unit = {}
+  def verifyPart2Samples(): Unit = {
+    println {
+      Part2
+        .dance("s1,x3/4,pe/b", DanceLine.ofLength(refineMV(5))).map(_.map(_.render))
+        .asResult("[abcde]".asRight)
+        .render
+    }
+  }
 }

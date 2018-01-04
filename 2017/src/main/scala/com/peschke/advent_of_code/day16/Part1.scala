@@ -42,38 +42,40 @@ object Part1 {
       positionB: Exchange.Position
     ): ErrorMsgOr[DanceLine] =
       for {
-        programA    <- dl.at(positionA)
-        programB    <- dl.at(positionB)
-        updatedOne  <- dl.update(positionB, programA)
+        programA    <- at(positionA)
+        programB    <- at(positionB)
+        updatedOne  <- update(positionB, programA)
         updatedBoth <- updatedOne.update(positionA, programB)
       } yield updatedBoth
-  }
 
-  implicit class DanceMoveOps(val dm: DanceMove) extends AnyVal {
-    def applyTo(dl: DanceLine): ErrorMsgOr[DanceLine] = {
+    def dance(dm: DanceMove): DanceLine = {
       def renderInput: String = s"${dm.render} -> ${dl.render}"
 
-      (dm, dl) match {
-        case (_, DanceLine(Vector())) => s"DanceLine is empty: ${renderInput}".asLeft
-        case (Spin(0), unchanged) => unchanged.asRight
-        case (Spin(c), _) if c < 0 => s"Cannot spin backwards: ${renderInput}".asLeft
+      (dm match {
+        case Spin(0) => dl.asRight
+        case Spin(c) if c < 0 => s"Cannot spin backwards: ${renderInput}".asLeft
 
-        case (Spin(c), DanceLine(programs)) =>
-          DanceLine((0 until c).foldLeft(programs) {
+        case Spin(c) =>
+          DanceLine((0 until c).foldLeft(dl.programs) {
             case (init :+ tail, _) => tail +: init
           }).asRight
 
-        case (Exchange(positionA, positionB), danceLine) =>
-          danceLine.swap(positionA, positionB)
+        case Exchange(positionA, positionB) =>
+          swap(positionA, positionB)
 
-        case (Partner(nameA, nameB), danceLine) =>
+        case Partner(nameA, nameB) =>
           for {
-            positionA <- danceLine.locateProgram(named = nameA)
-            positionB <- danceLine.locateProgram(named = nameB)
-            swapped   <- danceLine.swap(positionA, positionB)
+            positionA <- locateProgram(named = nameA)
+            positionB <- locateProgram(named = nameB)
+            swapped   <- swap(positionA, positionB)
           } yield swapped
+      }) match {
+        case Right(v) => v
+        case Left(msg) => throw new IllegalArgumentException(msg)
       }
     }
+
+    def dance(routine: List[DanceMove]): DanceLine = routine.foldLeft(dl)(_ dance _)
   }
 
   def parse(input: String): Try[List[DanceMove]] =
@@ -89,11 +91,9 @@ object Part1 {
 
   def dance(
     input: String,
-    initial: ErrorMsgOr[DanceLine] = DanceLine.ofLength(refineMV(16))
+    initialOrError: ErrorMsgOr[DanceLine] = DanceLine.ofLength(refineMV(16))
   ): Try[ErrorMsgOr[DanceLine]] =
-    parse(input).map { moves =>
-      moves.foldLeft(initial) { (prev, step) =>
-        prev.flatMap(step.applyTo)
-      }
+    parse(input).map { routine =>
+      initialOrError.map(_ dance routine)
     }
 }
