@@ -60,7 +60,8 @@ object AdventOfCodeDay {
       com.peschke.advent_of_code.day13.PacketScanners,
       com.peschke.advent_of_code.day14.DiskDefragmentation,
       com.peschke.advent_of_code.day15.DuelingGenerators,
-      com.peschke.advent_of_code.day16.PermutationPromenade
+      com.peschke.advent_of_code.day16.PermutationPromenade,
+      com.peschke.advent_of_code.day17.SpinLock
     )
 }
 
