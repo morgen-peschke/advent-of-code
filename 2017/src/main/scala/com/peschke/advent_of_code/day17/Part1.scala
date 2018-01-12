@@ -27,4 +27,5 @@ object Part1 {
       .map { gpl =>
         gpl.elements(gpl.position.value + 1)
       }
+      .mapError(SpinLock, input)
 }

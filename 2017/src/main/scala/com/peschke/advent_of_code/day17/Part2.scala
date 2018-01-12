@@ -25,5 +25,5 @@ object Part2 {
     }.elementAfterZero
 
   def shortCircuit(input: String): Try[Int] =
-    Part1.parse(input).map(walkThroughSpinLock(50000000, _))
+    Part1.parse(input).map(walkThroughSpinLock(50000000, _)).mapError(SpinLock, input)
 }
