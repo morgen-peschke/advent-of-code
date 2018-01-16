@@ -25,7 +25,7 @@ sealed trait Input {
     case Input.FromString(value) => value
     case Input.FromPath(path) =>
       val reader = Files.newInputStream(path)
-      try slurp(reader) //
+      try slurp(reader)
       finally reader.close()
     case Input.FromStdIn =>
       try slurp(System.in)

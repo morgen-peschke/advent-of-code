@@ -22,19 +22,19 @@ object AdventOfCodeOpts {
         inputOpt.foreach(_ => println())
       }
       inputOpt.foreach { input =>
-        val trimmed = input.contents.trim
+        val cached = input.contents
         if (skipPart1) {
           println("Part 1: [Skipped]")
         }
         else {
-          println(s"Part 1: ${adventOfCodeDay.runPart1(trimmed).get}")
+          println(s"Part 1: ${adventOfCodeDay.runPart1(cached).get}")
         }
 
         if (skipPart2) {
           println("Part 2: [Skipped]")
         }
         else {
-          println(s"Part 2: ${adventOfCodeDay.runPart2(trimmed).get}")
+          println(s"Part 2: ${adventOfCodeDay.runPart2(cached).get}")
         }
       }
     }
