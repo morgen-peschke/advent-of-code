@@ -64,7 +64,8 @@ object AdventOfCodeDay {
       com.peschke.advent_of_code.day17.SpinLock,
       com.peschke.advent_of_code.day18.Duet,
       com.peschke.advent_of_code.day19.ASeriesOfTubes,
-      com.peschke.advent_of_code.day20.ParticleSwarm
+      com.peschke.advent_of_code.day20.ParticleSwarm,
+      com.peschke.advent_of_code.day21.FractalArt
     )
 }
 
