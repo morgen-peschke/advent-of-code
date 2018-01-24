@@ -2,8 +2,7 @@ package com.peschke.advent_of_code
 package day1
 
 import scala.util.Try
-
-import com.peschke.advent_of_code.AdventOfCodeDay
+import cats.instances.int._
 
 /**
   * http://adventofcode.com/2017/day/1
@@ -104,7 +103,7 @@ object InverseCaptcha extends AdventOfCodeDay {
       "1111" -> 4,
       "1234" -> 0,
       "91212129" -> 9
-    ).map((verifyResult(inverseCaptchaPart1 _) _).tupled).foreach(println)
+    ).map((verifyResult(inverseCaptchaPart1) _).tupled).foreach(println)
   }
 
   def verifyPart2Samples(): Unit = {

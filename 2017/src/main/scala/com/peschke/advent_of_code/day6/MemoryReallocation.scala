@@ -1,10 +1,12 @@
 package com.peschke.advent_of_code
 package day6
 
-import com.peschke.advent_of_code.AdventOfCodeDay
-
+import cats.{Eq, Show}
 import cats.data.NonEmptyVector
 import cats.syntax.option._
+import cats.instances.int._
+import cats.instances.option._
+import com.peschke.advent_of_code.day6.Memory.Region
 
 import scala.util.Try
 
@@ -85,6 +87,9 @@ object MemoryReallocation extends AdventOfCodeDay {
   type P1 = Int
   type P2 = Int
 
+  implicit val regionEq: Eq[Region] = cats.derive.eq[Region]
+  implicit val regionShow: Show[Region] = cats.derive.show[Region]
+
   def parse(input: String): Try[Memory.Region] = Try {
     Memory.Region(
       NonEmptyVector.fromVectorUnsafe(
@@ -104,10 +109,10 @@ object MemoryReallocation extends AdventOfCodeDay {
     ).map((verifyResult((r: Memory.Region) => Try(r.reallocate)) _).tupled)
       .foreach(println)
 
-    println(verifyResult(Part1.stepsUntilCycle _)("0 2 7 0", 5))
+    println(verifyResult(Part1.stepsUntilCycle)("0 2 7 0", 5))
   }
 
   def verifyPart2Samples(): Unit = {
-    println(verifyResult(Part2.cycleLength _)("0 2 7 0", 4))
+    println(verifyResult(Part2.cycleLength)("0 2 7 0", 4))
   }
 }

@@ -3,8 +3,6 @@ package day16
 
 import scala.util.Try
 
-import eu.timepit.refined.refineMV
-
 object Part2 {
   import Part1.{ErrorMsgOr, DanceLineOps, parse}
 
@@ -12,7 +10,7 @@ object Part2 {
 
   def dance(
     input: String,
-    initialOrError: ErrorMsgOr[DanceLine] = DanceLine.ofLength(refineMV(16))
+    initialOrError: ErrorMsgOr[DanceLine] = DanceLine.ofLength(16)
   ): Try[ErrorMsgOr[DanceLine]] =
     parse(input).map { routine =>
       @scala.annotation.tailrec

@@ -1,6 +1,11 @@
 package com.peschke.advent_of_code
 package day13
 
+import cats.{Eq, Show}
+import cats.instances.boolean._
+import cats.instances.vector._
+import cats.instances.tuple._
+
 import scala.util.Try
 
 /**
@@ -345,10 +350,29 @@ object PacketScanners extends AdventOfCodeDay {
   def runPart1(input: String): Try[Severity] = Part1.traverseFirewall(input)
   def runPart2(input: String): Try[Delay] = Part2.traverseFirewallSafely(input)
 
-  val input = """|0: 3
-                 |1: 2
-                 |4: 4
-                 |6: 4""".stripMargin
+  private val input =
+    """|0: 3
+       |1: 2
+       |4: 4
+       |6: 4""".stripMargin
+
+  implicit val directionEq: Eq[Direction] = Eq.fromUniversalEquals[Direction]
+  implicit val directionShow: Show[Direction] = Show.fromToString[Direction]
+
+  implicit val scannerEq: Eq[Scanner] = Eq.fromUniversalEquals[Scanner]
+  implicit val scannerShow: Show[Scanner] = cats.derive.show[Scanner]
+
+  implicit val delayEq: Eq[Delay] = Eq.fromUniversalEquals[Delay]
+  implicit val delayShow: Show[Delay] = cats.derive.show[Delay]
+
+  implicit val firewallEq: Eq[Firewall] = Eq.fromUniversalEquals[Firewall]
+  implicit val firewallShow: Show[Firewall] = cats.derive.show[Firewall]
+
+  implicit val severityEq: Eq[Severity] = Eq.fromUniversalEquals[Severity]
+  implicit val severityShow: Show[Severity] = cats.derive.show[Severity]
+
+  implicit val caughtEq: Eq[Caught] = Eq.fromUniversalEquals[Caught]
+  implicit val caughtShow: Show[Caught] = cats.derive.show[Caught]
 
   val initial =
     Firewall(
@@ -364,7 +388,7 @@ object PacketScanners extends AdventOfCodeDay {
     import Part1.FirewallOps
 
     println("--- Parsing ---")
-    println(verifyResult(Part1.parse _)(input, initial))
+    println(verifyResult(Part1.parse)(input, initial))
 
     println("--- Tick ---")
     val testTick = ((_: Firewall).tick).liftedToTry
@@ -442,7 +466,7 @@ object PacketScanners extends AdventOfCodeDay {
     ).map((verifyResult(testTick) _).tupled).foreach(println)
 
     println("--- Traversal ---")
-    println(verifyResult(Part1.traverseFirewall _)(input, Severity(24)))
+    println(verifyResult(Part1.traverseFirewall)(input, Severity(24)))
   }
 
   def verifyPart2Samples(): Unit = {

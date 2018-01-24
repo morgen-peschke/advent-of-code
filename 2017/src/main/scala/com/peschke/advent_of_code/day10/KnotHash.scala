@@ -1,7 +1,12 @@
 package com.peschke.advent_of_code
 package day10
 
+import cats.{Eq, Show}
+
 import scala.util.Try
+import cats.instances.char._
+import cats.instances.vector._
+import cats.instances.int._
 
 /**
   * http://adventofcode.com/2017/day/10
@@ -131,7 +136,7 @@ import scala.util.Try
   * sixteen elements of the sparse hash XOR'd together, etc.
   *
   * For example, if the first sixteen elements of your sparse hash are
-  * as shown below, and the XOR operator is ^, you would calculate the
+  * as shown below, and the XOR operator is {{{^}}}, you would calculate the
   * first output number like this:
   *
   * {{{
@@ -167,6 +172,12 @@ import scala.util.Try
 object KnotHash extends AdventOfCodeDay {
   type P1 = Int
   type P2 = RenderedHash
+
+  implicit def hashContextEq[T]: Eq[HashContext[T]] = Eq.fromUniversalEquals[HashContext[T]]
+  implicit def hashContextShow[T](implicit s: Show[T]): Show[HashContext[T]] = cats.derive.show[HashContext[T]]
+
+  implicit val renderedHashEq: Eq[RenderedHash] = Eq.fromUniversalEquals[RenderedHash]
+  implicit val renderedHashShow: Show[RenderedHash] = Show.show[RenderedHash](_.hash)
 
   def runPart1(input: String): Try[Int] = Part1.verifyHash(input)
   def runPart2(input: String): Try[RenderedHash] = Part2.hash(input)
@@ -222,14 +233,14 @@ object KnotHash extends AdventOfCodeDay {
   def verifyPart2Samples(): Unit = {
     import Part2._
     val lengths = Vector(49,44,50,44,51,17,31,73,47,23)
-    println(verifyResult(parse _)("1,2,3", lengths))
+    println(verifyResult(parse)("1,2,3", lengths))
 
     Seq(
       ""         -> "a2582a3a0e66e6e86e3812dcb672a272".isHash,
       "AoC 2017" -> "33efeb34ea91902bb2f59c9920caa6cd".isHash,
       "1,2,3"    -> "3efbe78a8d82f29979031a4aa0b16a9d".isHash,
       "1,2,4"    -> "63960835bcdc130f0b66d7ff4f6a5a8e".isHash)
-    .map((verifyResult(hash _) _).tupled).foreach(println)
+    .map((verifyResult(hash) _).tupled).foreach(println)
 
   }
 }

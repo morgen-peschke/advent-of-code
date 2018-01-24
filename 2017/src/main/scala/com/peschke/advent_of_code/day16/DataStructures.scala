@@ -2,17 +2,18 @@ package com.peschke.advent_of_code
 package day16
 
 import cats.syntax.traverse._
+import cats.syntax.either._
 import cats.instances.vector._
 import cats.instances.either._
 
-import eu.timepit.refined.W
-import eu.timepit.refined.api.Refined
-import eu.timepit.refined.api.RefType.applyRef
-import eu.timepit.refined.numeric._
-
 case class Program(name: Program.Name)
 object Program {
-  type Name = Char Refined Interval.Closed[W.`'a'`.T, W.`'p'`.T]
+  case class Name(value: Char) extends AnyVal
+  object Name {
+    def apply(v: Char): Either[String, Name] =
+      if (('a' to 'p').contains(v)) new Name(v).asRight
+      else s"'$v' is out of bounds for Name".asLeft
+  }
 }
 
 sealed trait DanceMove {
@@ -29,17 +30,18 @@ case class Partner(a: Program.Name, b: Program.Name) extends DanceMove {
 }
 
 object Exchange {
-  type Position = Int Refined Interval.Closed[W.`0`.T, W.`15`.T]
+  type Position = Int
 }
 
 case class DanceLine(programs: Vector[Program]) {
   def render: String = programs.map(_.name).mkString("[", "", "]")
 }
 object DanceLine {
-  def ofLength(l: Int Refined Positive): Either[String,DanceLine] =
-    ('a' until ('a' + l.value).toChar)
+  type EitherOrError[A] = Either[String, A]
+  def ofLength(l: Int): Either[String,DanceLine] =
+    ('a' until ('a' + l).toChar)
       .toVector
-      .traverse(c => applyRef[Program.Name](c))
+      .traverse[EitherOrError, Program.Name](c => Program.Name(c))
       .map { names =>
         DanceLine(names.map(Program(_)))
       }

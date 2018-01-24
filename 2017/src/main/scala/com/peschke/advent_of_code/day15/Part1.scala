@@ -4,8 +4,11 @@ package day15
 import scala.util.Try
 
 object Part1 {
-  def parse(input: String): Try[Seq[Generator]] = Try {
-    input.split('\n').map { line =>
+  def parse(input: String): Try[Vector[Generator]] = Try {
+    input
+      .split('\n')
+      .toVector
+      .map { line =>
       line.split(' ') match {
         case Array("Generator", "A", "starts", "with", raw) =>
           Generator("A", BigInt(raw), BigInt(16807))

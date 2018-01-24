@@ -1,10 +1,13 @@
 package com.peschke.advent_of_code
 package day7
 
-import com.peschke.advent_of_code.AdventOfCodeDay
-
+import cats.{Eq, Show}
 import cats.data.NonEmptyList
 import cats.syntax.option._
+import cats.instances.option._
+import cats.instances.int._
+import cats.instances.list._
+import cats.instances.map._
 
 import scala.util.Try
 
@@ -128,14 +131,25 @@ object RecursiveCircus extends AdventOfCodeDay {
   private val regexForProgramWithNoChildren = """(.+) \((\d+)\)""".r
   private val regexForProgramWithChildren = """(.+) \((\d+)\) -> (.+)""".r
 
-  def parse(input: String): Try[Seq[ProgramInfo]] =
-    Try(input.split("\n").map {
-      case regexForProgramWithNoChildren(name, weight) =>
-        ProgramInfo(Name(name), weight.toInt, Nil)
+  implicit val balanceHelperEq: Eq[Program.BalanceHelper] = cats.derive.eq[Program.BalanceHelper]
+  implicit val unbalancedProgramEq: Eq[UnbalancedProgram] = cats.derive.eq[UnbalancedProgram]
+  implicit val programInfoEq: Eq[ProgramInfo] = cats.derive.eq[ProgramInfo]
+  implicit val programEq: Eq[Program] = Eq.fromUniversalEquals[Program]
+  implicit val diskHolderEq: Eq[Program.DiscHolder] = Eq.fromUniversalEquals[Program.DiscHolder]
 
-      case regexForProgramWithChildren(name, weight, childrenNames) =>
-        ProgramInfo(Name(name), weight.toInt, childrenNames.split(", ").map(Name(_)).toList)
-    }.toSeq)
+  implicit val nameShow: Show[Name] = cats.derive.show[Name]
+  implicit val unbalancedProgramShow: Show[UnbalancedProgram] = cats.derive.show[UnbalancedProgram]
+  implicit val programShow: Show[Program] = cats.derive.show[Program]
+  implicit val programInfoShow: Show[ProgramInfo] = cats.derive.show[ProgramInfo]
+
+  def parse(input: String): Try[List[ProgramInfo]] =
+    Try(input.split("\n").map {
+      case regexForProgramWithNoChildren(n, weight) =>
+        ProgramInfo(Name(n), weight.toInt, Nil)
+
+      case regexForProgramWithChildren(n, weight, childrenNames) =>
+        ProgramInfo(Name(n), weight.toInt, childrenNames.split(", ").map(Name(_)).toList)
+    }.toList)
 
   private val sampleInput =
     """|pbga (66)
@@ -153,7 +167,7 @@ object RecursiveCircus extends AdventOfCodeDay {
        |cntj (57)
        |""".stripMargin
 
-  private val parsedSampleInput = Seq(
+  private val parsedSampleInput = List(
     ProgramInfo(Name("pbga"), 66, Nil),
     ProgramInfo(Name("xhth"), 57, Nil),
     ProgramInfo(Name("ebii"), 61, Nil),
@@ -187,9 +201,9 @@ object RecursiveCircus extends AdventOfCodeDay {
       ))))
 
   def verifyPart1Samples(): Unit = {
-    println(verifyResult(parse _)(sampleInput, parsedSampleInput))
-    println(verifyResult(Part1.buildTree _)(parsedSampleInput, sampleTree))
-    println(verifyResult(Part1.whoIsOnBottom _)(sampleInput, Name("tknk")))
+    println(verifyResult(parse)(sampleInput, parsedSampleInput))
+    println(verifyResult(Part1.buildTree)(parsedSampleInput, sampleTree))
+    println(verifyResult(Part1.whoIsOnBottom)(sampleInput, Name("tknk")))
   }
 
   def verifyPart2Samples(): Unit = {

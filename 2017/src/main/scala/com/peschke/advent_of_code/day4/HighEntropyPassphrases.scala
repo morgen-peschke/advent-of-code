@@ -3,7 +3,7 @@ package day4
 
 import scala.util.Try
 
-import com.peschke.advent_of_code.AdventOfCodeDay
+import cats.instances.int._
 
 /**
   * http://adventofcode.com/2017/day/4
@@ -65,7 +65,7 @@ object HighEntropyPassphrases extends AdventOfCodeDay {
       "aa bb cc dd ee" -> 1,
       "aa bb cc dd aa" -> 0,
       "aa bb cc dd aaa" -> 1
-    ).map((verifyResult(Part1.validate _) _).tupled).foreach(println)
+    ).map((verifyResult(Part1.validate) _).tupled).foreach(println)
   }
 
   def verifyPart2Samples(): Unit = {
@@ -75,6 +75,6 @@ object HighEntropyPassphrases extends AdventOfCodeDay {
       "a ab abc abd abf abj"     -> 1,
       "iiii oiii ooii oooi oooo" -> 1,
       "oiii ioii iioi iiio"      -> 0
-    ).map((verifyResult(Part2.validate _) _).tupled).foreach(println)
+    ).map((verifyResult(Part2.validate) _).tupled).foreach(println)
   }
 }

@@ -1,6 +1,10 @@
 package com.peschke.advent_of_code
 package day18
 
+import cats.{Eq, Show}
+import cats.instances.int._
+import cats.instances.vector._
+
 import scala.util.Try
 
 /**
@@ -139,6 +143,12 @@ import scala.util.Try
 object Duet extends AdventOfCodeDay {
   type P1 = Literal
   type P2 = Int
+
+  implicit val literalEq: Eq[Literal] = Eq.fromUniversalEquals[Literal]
+  implicit val opCodeEq: Eq[OpCode] = Eq.fromUniversalEquals[OpCode]
+
+  implicit val literalShow: Show[Literal] = cats.derive.show[Literal]
+  implicit val opCodeShow: Show[OpCode] = Show.fromToString[OpCode]
 
   def runPart1(input: String): Try[P1] = Part1.findFirstRecoveredSound(input)
   def runPart2(input: String): Try[P2] = Part2.countMessages(input)

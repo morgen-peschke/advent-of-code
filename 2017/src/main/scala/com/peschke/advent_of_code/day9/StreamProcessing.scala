@@ -1,11 +1,14 @@
 package com.peschke.advent_of_code
 package day9
 
+import cats.instances.char._
+import cats.instances.int._
+import cats.instances.list._
+import cats.instances.option._
+import cats.instances.tuple._
 import cats.syntax.option._
 
 import scala.util.Try
-
-import com.peschke.advent_of_code.AdventOfCodeDay
 
 /**
   * http://adventofcode.com/2017/day/9
@@ -152,7 +155,7 @@ object StreamProcessing extends AdventOfCodeDay {
       "{{<ab>},{<ab>},{<ab>},{<ab>}}" -> 9,
       "{{<!!>},{<!!>},{<!!>},{<!!>}}" -> 9,
       "{{<a!>},{<a!>},{<a!>},{<ab>}}" -> 3
-    ).map((verifyResult(Part1.totalScore _) _).tupled).foreach(println)
+    ).map((verifyResult(Part1.totalScore) _).tupled).foreach(println)
   }
 
   def verifyPart2Samples(): Unit = {
@@ -164,6 +167,6 @@ object StreamProcessing extends AdventOfCodeDay {
       "<!!>" -> 0,
       "<!!!>>" -> 0,
       """<{o"i!a,<{i<a>""" -> 10
-    ).map((verifyResult(Part2.garbageLength _) _).tupled).foreach(println)
+    ).map((verifyResult(Part2.garbageLength) _).tupled).foreach(println)
   }
 }

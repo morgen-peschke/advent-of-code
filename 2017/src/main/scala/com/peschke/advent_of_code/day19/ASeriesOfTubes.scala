@@ -1,6 +1,11 @@
 package com.peschke.advent_of_code
 package day19
 
+import cats.{Eq, Show}
+import cats.instances.int._
+import cats.instances.string._
+import cats.instances.map._
+
 import scala.util.Try
 
 /**
@@ -85,6 +90,9 @@ import scala.util.Try
 object ASeriesOfTubes extends AdventOfCodeDay {
   type P1 = String
   type P2 = Int
+
+  implicit val routingDiagramEq: Eq[RoutingDiagram] = cats.derive.eq[RoutingDiagram]
+  implicit val routingDiagramShow: Show[RoutingDiagram] = cats.derive.show[RoutingDiagram]
 
   def runPart1(input: String): Try[P1] =
     Part1.parse(input).flatMap(Part1.navigate).mapError(ASeriesOfTubes, input)

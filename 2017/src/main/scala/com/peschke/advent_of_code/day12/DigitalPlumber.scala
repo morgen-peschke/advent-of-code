@@ -1,6 +1,11 @@
 package com.peschke.advent_of_code
 package day12
 
+import cats.{Eq, Show}
+import cats.instances.set._
+import cats.instances.string._
+import cats.instances.vector._
+
 import scala.util.Try
 
 /**
@@ -92,7 +97,13 @@ object DigitalPlumber extends AdventOfCodeDay {
   private val p5 = Program("5")
   private val p6 = Program("6")
 
-  private val rawPipes = Seq(
+  implicit val programEq: Eq[Program] = cats.derive.eq[Program]
+  implicit val programShow: Show[Program] = cats.derive.show[Program]
+
+  implicit val pipeEq: Eq[Pipe] = cats.derive.eq[Pipe]
+  implicit val pipeShow: Show[Pipe] = cats.derive.show[Pipe]
+
+  private val rawPipes = Vector(
     Pipe(p0, p2),
     Pipe(p1, p1),
     Pipe(p2, p3),
@@ -110,7 +121,7 @@ object DigitalPlumber extends AdventOfCodeDay {
                    |5 <-> 6
                    |6 <-> 4, 5""".stripMargin
 
-    println(verifyResult(Part1.parse _)(input, rawPipes))
+    println(verifyResult(Part1.parse)(input, rawPipes))
 
     val findConnectionsTest = (Part1.findConnections(_: Program, rawPipes)).liftedToTry
     Seq(

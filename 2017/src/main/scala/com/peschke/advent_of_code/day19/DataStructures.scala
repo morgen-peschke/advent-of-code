@@ -1,6 +1,8 @@
 package com.peschke.advent_of_code
 package day19
 
+import cats.Eq
+
 sealed trait Tile extends Product with Serializable {
   def render: String = this match {
     case X => " "
@@ -15,6 +17,10 @@ case object ╬ extends Tile
 case object ═ extends Tile
 case object ║ extends Tile
 case class C(value: Char) extends Tile
+
+object Tile {
+  implicit val eq: Eq[Tile] = Eq.fromUniversalEquals[Tile]
+}
 
 sealed trait Direction extends Product with Serializable
 case object North extends Direction

@@ -9,7 +9,7 @@ import cats.instances.vector._
 import cats.syntax.traverse._
 
 object Part1 {
-  def parse(input: String): Try[Seq[Pipe]] =
+  def parse(input: String): Try[Vector[Pipe]] =
     input.split('\n')
       .toVector
       .traverse(Parser.programAndConnections.tryToParse)
@@ -30,7 +30,7 @@ object Part1 {
             case Pipe(`p`, pOther) => pOther
             case Pipe(pOther, `p`) => pOther
           }
-          .filterNot(accum.contains _)
+          .filterNot(accum.contains)
       connectedPrograms.foldLeft(accum ++ connectedPrograms) {
         case (currAccum, pOther) => loop(pOther, currAccum)
       }

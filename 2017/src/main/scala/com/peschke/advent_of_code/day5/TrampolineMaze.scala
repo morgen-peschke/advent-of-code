@@ -2,6 +2,9 @@ package com.peschke.advent_of_code
 package day5
 
 import com.peschke.advent_of_code.AdventOfCodeDay
+import cats.instances.int._
+import cats.instances.string._
+import cats.instances.list._
 
 import scala.util.Try
 

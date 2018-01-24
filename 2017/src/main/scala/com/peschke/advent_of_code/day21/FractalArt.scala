@@ -2,6 +2,9 @@ package com.peschke.advent_of_code
 package day21
 
 import scala.util.Try
+import cats.syntax.show._
+import cats.instances.int._
+import cats.instances.string._
 
 /**
   * http://adventofcode.com/2017/day/21
@@ -148,7 +151,7 @@ object FractalArt extends AdventOfCodeDay {
 
   def verifyPart1Samples(): Unit = {
     import Pixel.{On, Off}
-    import Part1.{ImageOps}
+    import Part1.ImageOps
 
     println("--- parsing ---")
     Seq(
@@ -166,7 +169,7 @@ object FractalArt extends AdventOfCodeDay {
                                   |.##.""".stripMargin
     ).map {
       case (input, rendered) =>
-        Parser.image.tryToParse(input).map("\n" + _.render).asResult(rendered).render
+        Parser.image.tryToParse(input).map("\n" + _.render).asResult(rendered).show
     }.foreach(println)
 
     val imgWithOddNumberOfRows = Part1.defaultImage
@@ -224,7 +227,7 @@ object FractalArt extends AdventOfCodeDay {
       case (transformation, rendered) =>
         Try("\n" + imgWithOddNumberOfRows.applyTransformation(transformation).render)
           .asResult(rendered)
-          .render
+          .show
     }.foreach(println)
 
     println("--- transformations (even number of rows) ---")
@@ -258,7 +261,7 @@ object FractalArt extends AdventOfCodeDay {
       case (transformation, rendered) =>
         Try("\n" + imgWithEvenNumberOfRows.applyTransformation(transformation).render)
           .asResult(rendered)
-          .render
+          .show
     }.foreach(println)
 
     println("--- splitting image ---")
@@ -268,7 +271,7 @@ object FractalArt extends AdventOfCodeDay {
     ).foreach {
       case (input, output) =>
         println(
-          Try(input.split).map("\n" + _.render).asResult("\n" + output.render).render
+          Try(input.split).map("\n" + _.render).asResult("\n" + output.render).show
         )
     }
 
@@ -277,7 +280,7 @@ object FractalArt extends AdventOfCodeDay {
       Try(dividedImage.flatten)
         .map("\n" + _.render)
         .asResult("\n" + imgWhichShouldBeDivided.render)
-        .render)
+        .show)
 
     println("--- transform using rules ---")
     val resultOfPattern1 =
@@ -317,7 +320,7 @@ object FractalArt extends AdventOfCodeDay {
             Try(Part1.transformUsing(rules)(input))
               .map("\n" + _.render)
               .asResult("\n" + output.render)
-              .render)
+              .show)
       }
 
     println("--- lit pixels after N iterations ---")
@@ -325,7 +328,7 @@ object FractalArt extends AdventOfCodeDay {
       Part1
         .litPixelsAfterIterations(2)("""|../.# => ##./#../...
                                         |.#./..#/### => #..#/..../..../#..#""".stripMargin)
-        .asResult(12).render)
+        .asResult(12).show)
   }
 
   def verifyPart2Samples(): Unit = ()

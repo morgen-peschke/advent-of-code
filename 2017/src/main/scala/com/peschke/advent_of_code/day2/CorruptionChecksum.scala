@@ -2,8 +2,7 @@ package com.peschke.advent_of_code
 package day2
 
 import scala.util.Try
-
-import com.peschke.advent_of_code.AdventOfCodeDay
+import cats.instances.int._
 
 /**
   * http://adventofcode.com/2017/day/2
@@ -99,7 +98,7 @@ object CorruptionChecksum extends AdventOfCodeDay {
     }.mapError(CorruptionChecksum, input)
 
   def verifyPart1Samples(): Unit = {
-    println(verifyResult(checksum _)(
+    println(verifyResult(checksum)(
       """|5 1 9 5
          |7 5 3
          |2 4 6 8""".stripMargin,
@@ -107,7 +106,7 @@ object CorruptionChecksum extends AdventOfCodeDay {
   }
 
   def verifyPart2Samples(): Unit = {
-    println(verifyResult(rowResults _)(
+    println(verifyResult(rowResults)(
       """|5 9 2 8
          |9 4 7 3
          |3 8 6 5""".stripMargin,

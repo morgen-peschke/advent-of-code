@@ -1,17 +1,17 @@
 package com.peschke.advent_of_code
 package day8
 
-import com.peschke.advent_of_code.AdventOfCodeDay
-
-import cats.data.Validated.{Valid,Invalid}
-
-import cats.syntax.validated._
+import cats.data.Validated.{Invalid, Valid}
+import cats.instances.either._
+import cats.instances.list._
+import cats.instances.map._
+import cats.instances.string._
 import cats.syntax.either._
 import cats.syntax.foldable._
+import cats.syntax.validated._
+import cats.{Eq, Show}
 
-import cats.instances.list._
-
-import scala.util.{Try, Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 /**
   * http://adventofcode.com/2017/day/8
@@ -66,6 +66,14 @@ object IHeardYouLikeRegisters extends AdventOfCodeDay {
   type P1 = Amount
   type P2 = Amount
 
+  implicit val instructionEq: Eq[Instruction] = cats.derive.eq[Instruction]
+  implicit val tokenEq: Eq[Token] = cats.derive.eq[Token]
+
+  implicit val amountShow: Show[Amount] = cats.derive.show[Amount]
+  implicit val instructionShow: Show[Instruction] = cats.derive.show[Instruction]
+  implicit val registerShow: Show[Register] = cats.derive.show[Register]
+  implicit val tokenShow: Show[Token] = cats.derive.show[Token]
+
   def compile(input: String): Try[List[Instruction]] = Instruction.compile(input) match {
     case Invalid(errors) =>
       val renderedErrors = errors.toList.mkString("\n")
@@ -103,7 +111,7 @@ object IHeardYouLikeRegisters extends AdventOfCodeDay {
 
   def runPart2(input: String): Try[Amount] =
     compile(input)
-      .map((Part2.eval _) andThen (_.iterator))
+      .map(Part2.eval _ andThen (_.iterator))
       .map { itr =>
         itr.flatMap(_.values.toList.maximumOption).toList.maximumOption
       }
@@ -121,8 +129,8 @@ object IHeardYouLikeRegisters extends AdventOfCodeDay {
     List("c", "inc", "-20", "if", "c", "==", "10").map(Token(_)))
 
   private val sampleInstructions = {
-    import Operation.OpCode.{Increment, Decrement}
     import Conditional.Comparison._
+    import Operation.OpCode.{Decrement, Increment}
     List(
     Instruction(
       Operation(Register("b"), Increment, Amount(5)),

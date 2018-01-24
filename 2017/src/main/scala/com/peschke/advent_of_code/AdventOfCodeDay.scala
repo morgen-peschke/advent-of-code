@@ -71,22 +71,3 @@ object AdventOfCodeDay {
 
 class AdventOfCodeDayFailure(day: AdventOfCodeDay, input: String, cause: Throwable)
     extends IllegalArgumentException(s"$day failed on input:\n$input", cause)
-
-sealed trait Result {
-  def render: String
-}
-object Result {
-  case object Pass extends Result {
-    def render: String = "[Pass]"
-  }
-
-  case class Fail[A](actual: A, expected: A) extends Result {
-    def render: String = s"[Fail] returned $actual, but expected $expected"
-  }
-
-  case class Abort[T <: Throwable](exception: T) extends Result {
-    def render: String =
-      s"""|[Fail] threw an exception:
-          |$exception""".stripMargin
-  }
-}

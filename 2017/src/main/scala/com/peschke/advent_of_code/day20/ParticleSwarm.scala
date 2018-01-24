@@ -1,7 +1,13 @@
 package com.peschke.advent_of_code
 package day20
 
+import cats.{Eq, Show}
+
 import scala.util.Try
+import cats.syntax.show._
+import cats.instances.tuple._
+import cats.instances.vector._
+import cats.instances.int._
 
 /**
   * http://adventofcode.com/2017/day/20
@@ -101,6 +107,9 @@ object ParticleSwarm extends AdventOfCodeDay {
   type P1 = Int
   type P2 = Int
 
+  implicit val particleEq: Eq[Particle] = cats.derive.eq[Particle]
+  implicit val particleShow: Show[Particle] = cats.derive.show[Particle]
+
   def runPart1(input: String): Try[P1] =
     Part1.closestToOrigin(input.trim, 1000).mapError(ParticleSwarm, input)
 
@@ -148,18 +157,18 @@ object ParticleSwarm extends AdventOfCodeDay {
 
     println("--- stepping ---")
     particle0.sliding(2).map {
-      case Seq(p, pnext) => Try(p.step).asResult(pnext).render
+      case Seq(p, pnext) => Try(p.step).asResult(pnext).show
     }.foreach(println)
 
     particle1.sliding(2).map {
-      case Seq(p, pnext) => Try(p.step).asResult(pnext).render
+      case Seq(p, pnext) => Try(p.step).asResult(pnext).show
     }.foreach(println)
 
     println("--- distance to origin ---")
     expected.zip(expected.map(_.point.x.abs))
       .map {
         case (particle, expectedDistance) =>
-          Try(particle.distanceToOrigin).asResult(expectedDistance).render
+          Try(particle.distanceToOrigin).asResult(expectedDistance).show
       }
       .foreach(println)
 
@@ -189,8 +198,8 @@ object ParticleSwarm extends AdventOfCodeDay {
     val step3 = Vector(
       3 -> Particle(Point(0,0,0), Velocity(-1,0,0), Acceleration(0,0,0)))
 
-    println(Try(Part2.simulate(initial, 1).sortBy(_._1)).asResult(step1).render)
-    println(Try(Part2.simulate(initial, 2).sortBy(_._1)).asResult(step2).render)
-    println(Try(Part2.simulate(initial, 3).sortBy(_._1)).asResult(step3).render)
+    println(Try(Part2.simulate(initial, 1).sortBy(_._1)).asResult(step1).show)
+    println(Try(Part2.simulate(initial, 2).sortBy(_._1)).asResult(step2).show)
+    println(Try(Part2.simulate(initial, 3).sortBy(_._1)).asResult(step3).show)
   }
 }

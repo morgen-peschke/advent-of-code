@@ -1,11 +1,13 @@
 package com.peschke.advent_of_code
 package day16
 
+import cats.{Eq, Show}
+
 import scala.util.Try
-
 import cats.syntax.either._
-
-import eu.timepit.refined.refineMV
+import cats.instances.string._
+import cats.instances.either._
+import cats.syntax.show._
 
 /**
   * http://adventofcode.com/2017/day/16
@@ -69,6 +71,12 @@ object PermutationPromenade extends AdventOfCodeDay {
   def runPart1(input: String): Try[P1] = Part1.dance(input).map(_.map(_.render))
   def runPart2(input: String): Try[P2] = Part2.dance(input).map(_.map(_.render))
 
+  implicit val danceLineEq: Eq[DanceLine] = Eq.fromUniversalEquals[DanceLine]
+  implicit val danceMoveEq: Eq[DanceMove] = Eq.fromUniversalEquals[DanceMove]
+
+  implicit val danceLineShow: Show[DanceLine] = Show.show[DanceLine](_.render)
+  implicit val danceMoveShow: Show[DanceMove] = Show.fromToString[DanceMove]
+
   def verifyPart1Samples(): Unit = {
     import Part1.DanceLineOps
 
@@ -76,27 +84,27 @@ object PermutationPromenade extends AdventOfCodeDay {
     Seq(
       "s1" -> Spin(1).asRight,
       "s17" -> Spin(17).asRight,
-      "x3/4" -> Exchange(refineMV(3), refineMV(4)).asRight,
-      "x13/12" -> Exchange(refineMV(13), refineMV(12)).asRight,
-      "pe/b" -> Partner(refineMV('e'), refineMV('b')).asRight
+      "x3/4" -> Exchange(3, 4).asRight,
+      "x13/12" -> Exchange(13, 12).asRight,
+      "pe/b" -> Partner(Program.Name('e').right.get, Program.Name('b').right.get).asRight
     ).map((verifyResult(Parser.danceMove.tryToParse) _).tupled).foreach(println)
 
     println("--- dance moves ---")
-    val initial = DanceLine.ofLength(refineMV(5))
+    val initial = DanceLine.ofLength(5)
 
     val finalResult =
       Seq(
         Spin(1) -> "[eabcd]",
-        Exchange(refineMV(3), refineMV(4)) -> "[eabdc]",
-        Partner(refineMV('e'), refineMV('b')) -> "[baedc]"
+        Exchange(3, 4) -> "[eabdc]",
+        Partner(Program.Name('e').right.get, Program.Name('b').right.get) -> "[baedc]"
       ).foldLeft(initial) {
         case (l @ Left(_), _) => l
         case (Right(danceLine), (step, expected)) =>
           val result = danceLine.dance(step)
-          println(result.render.asRight.asResult(expected).render)
+          println(Try(result.render).asResult(expected).show)
           result.asRight
       }
-    println(finalResult.map(_.render).asResult("[baedc]").render)
+    println(finalResult.map(_.render).asRightResult("[baedc]").show)
 
     println(verifyResult(Part1.dance(_: String, initial))("s1,x3/4,pe/b", finalResult))
   }
@@ -104,9 +112,9 @@ object PermutationPromenade extends AdventOfCodeDay {
   def verifyPart2Samples(): Unit = {
     println {
       Part2
-        .dance("s1,x3/4,pe/b", DanceLine.ofLength(refineMV(5))).map(_.map(_.render))
+        .dance("s1,x3/4,pe/b", DanceLine.ofLength(5)).map(_.map(_.render))
         .asResult("[abcde]".asRight)
-        .render
+        .show
     }
   }
 }

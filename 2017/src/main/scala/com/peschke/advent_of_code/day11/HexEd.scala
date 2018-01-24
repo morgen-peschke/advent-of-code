@@ -2,6 +2,7 @@ package com.peschke.advent_of_code
 package day11
 
 import scala.util.Try
+import cats.instances.int._
 
 /**
   * http://adventofcode.com/2017/day/11
@@ -61,7 +62,7 @@ object HexEd extends AdventOfCodeDay {
       "ne,ne,sw,sw"    -> 0,
       "ne,ne,s,s"      -> 2,
       "se,sw,se,sw,sw" -> 3
-    ).map((verifyResult(Part1.distanceAfter _) _).tupled).foreach(println)
+    ).map((verifyResult(Part1.distanceAfter) _).tupled).foreach(println)
   }
   def verifyPart2Samples(): Unit = {}
 }

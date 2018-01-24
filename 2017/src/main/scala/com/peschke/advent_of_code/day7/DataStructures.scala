@@ -1,8 +1,14 @@
-package com.peschke.advent_of_code.day7
+package com.peschke.advent_of_code
+package day7
 
+import cats.Eq
+import cats.instances.string._
 import cats.data.NonEmptyList
 
 case class Name(n: String)
+object Name {
+  implicit val eq: Eq[Name] = Eq.by(_.n)
+}
 
 case class ProgramInfo(name: Name, weight: Int, supporting: List[Name])
 

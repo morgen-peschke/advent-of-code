@@ -2,10 +2,10 @@ package com.peschke.advent_of_code
 package day3
 
 import scala.util.Try
-
-import com.peschke.advent_of_code.AdventOfCodeDay
-
+import cats.instances.string._
+import cats.instances.int._
 import Steps.syntax._
+import cats.{Eq, Show}
 
 /**
   * http://adventofcode.com/2017/day/3
@@ -79,6 +79,9 @@ object SpiralMemory extends AdventOfCodeDay {
   type P1 = Steps
   type P2 = Int
 
+  implicit val stepsEq: Eq[Steps] = cats.derive.eq[Steps]
+  implicit val stepsShow: Show[Steps] = cats.derive.show[Steps]
+
   def parse(input: String): Try[Int] = Try(input.toInt)
 
   def runPart1(input: String): Try[Steps] = Part1.spiralMemory(input)
@@ -90,7 +93,7 @@ object SpiralMemory extends AdventOfCodeDay {
       "12" -> 3.steps,
       "23" -> 2.steps,
       "1024" -> 31.steps
-    ).map((verifyResult(Part1.spiralMemory _) _).tupled).foreach(println)
+    ).map((verifyResult(Part1.spiralMemory) _).tupled).foreach(println)
   }
 
   def verifyPart2Samples(): Unit = {

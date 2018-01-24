@@ -1,6 +1,8 @@
 package com.peschke.advent_of_code
 package day17
 
+import cats.{Eq, Show}
+
 import scala.util.Try
 
 /**
@@ -87,6 +89,9 @@ object SpinLock extends AdventOfCodeDay {
 
   def runPart1(input: String): Try[P1] = Part1.shortCircuit(input)
   def runPart2(input: String): Try[P2] = Part2.shortCircuit(input)
+
+  implicit val growingSpinLockEq: Eq[GrowingSpinLock] = Eq.fromUniversalEquals[GrowingSpinLock]
+  implicit val growingSpinLockShow: Show[GrowingSpinLock] = Show.fromToString[GrowingSpinLock]
 
   def verifyPart1Samples(): Unit = {
     Seq(

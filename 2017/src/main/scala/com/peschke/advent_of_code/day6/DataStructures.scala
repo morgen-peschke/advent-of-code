@@ -1,6 +1,7 @@
-package com.peschke.advent_of_code.day6
+package com.peschke.advent_of_code
+package day6
 
-import cats.kernel.Order
+import cats.Order
 import cats.data.NonEmptyVector
 
 import cats.syntax.reducible._

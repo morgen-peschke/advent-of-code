@@ -3,21 +3,22 @@ package day16
 
 import cats.syntax.either._
 
-import eu.timepit.refined.api.RefType.applyRef
-
 object Parser {
   import fastparse.all._
 
   val integer: P[Int] = P(CharIn('0' to '9').rep.!.map(_.toInt))
 
   val position: P[Either[String,Exchange.Position]] =
-    integer.map(applyRef[Exchange.Position](_))
+    integer.map { i =>
+      if ((0 to 16).contains(i)) i.asRight
+      else s"$i is out of bounds for Position".asLeft
+    }
 
   val programName: P[Either[String,Program.Name]] =
     P(CharIn('a' to 'p').!.map { str =>
       for {
         char <- str.asChar
-        name <- applyRef[Program.Name](char)
+        name <- Program.Name(char)
       } yield name
     })
 

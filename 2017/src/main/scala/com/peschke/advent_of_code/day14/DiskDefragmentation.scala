@@ -1,6 +1,8 @@
 package com.peschke.advent_of_code
 package day14
 
+import cats.instances.int._
+
 import scala.util.Try
 
 /**
@@ -99,10 +101,10 @@ object DiskDefragmentation extends AdventOfCodeDay {
   def runPart2(input: String): Try[Int] = Part2.regions(input)
 
   def verifyPart1Samples(): Unit = {
-    println(verifyResult(Part1.usedSquares _)("flqrgnkx", 8108))
+    println(verifyResult(Part1.usedSquares)("flqrgnkx", 8108))
   }
 
   def verifyPart2Samples(): Unit = {
-    println(verifyResult(Part2.regions _)("flqrgnkx", 1242))
+    println(verifyResult(Part2.regions)("flqrgnkx", 1242))
   }
 }

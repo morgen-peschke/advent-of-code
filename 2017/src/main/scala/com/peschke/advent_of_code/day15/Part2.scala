@@ -6,8 +6,11 @@ import scala.util.Try
 object Part2 {
   import Part1.{mask, GeneratorOps}
 
-  def parse(input: String): Try[Seq[GeneratorWithFilter]] = Try {
-    input.split('\n').map { line =>
+  def parse(input: String): Try[Vector[GeneratorWithFilter]] = Try {
+    input
+      .split('\n')
+      .toVector
+      .map { line =>
       line.split(' ') match {
         case Array("Generator", "A", "starts", "with", raw) =>
           GeneratorWithFilter(Generator("A", BigInt(raw), BigInt(16807)), BigInt(4))

@@ -9,10 +9,6 @@ import cats.instances.list._
 import cats.syntax.either._
 import cats.syntax.option._
 import cats.syntax.traverse._
-import cats.syntax.foldable._
-
-import eu.timepit.refined.{refineV, refineMV}
-import eu.timepit.refined.numeric._
 
 object Part1 {
   type ErrorMsg = String
@@ -22,17 +18,17 @@ object Part1 {
     def locateProgram(named: Program.Name): ErrorMsgOr[Exchange.Position] =
       dl.programs.indexWhere(_.name == named) match {
         case -1 => s"Unable to find program named $named".asLeft
-        case i => refineV(i)
+        case i => i.asRight
       }
 
     def at(position: Exchange.Position): ErrorMsgOr[Program] =
       dl.programs
-        .lift(position.value)
+        .lift(position)
         .toValid(s"No program at $position")
         .toEither
 
     def update(position: Exchange.Position, program: Program): ErrorMsgOr[DanceLine] =
-      Try(dl.programs.updated(position.value, program)) match {
+      Try(dl.programs.updated(position, program)) match {
         case Success(programs) => DanceLine(programs).asRight
         case Failure(ex) => s"Unable to update at $position: ${ex.getMessage}".asLeft
       }
@@ -53,7 +49,7 @@ object Part1 {
 
       (dm match {
         case Spin(0) => dl.asRight
-        case Spin(c) if c < 0 => s"Cannot spin backwards: ${renderInput}".asLeft
+        case Spin(c) if c < 0 => s"Cannot spin backwards: $renderInput".asLeft
 
         case Spin(c) =>
           DanceLine((0 until c).foldLeft(dl.programs) {
@@ -91,7 +87,7 @@ object Part1 {
 
   def dance(
     input: String,
-    initialOrError: ErrorMsgOr[DanceLine] = DanceLine.ofLength(refineMV(16))
+    initialOrError: ErrorMsgOr[DanceLine] = DanceLine.ofLength(16)
   ): Try[ErrorMsgOr[DanceLine]] =
     parse(input).map { routine =>
       initialOrError.map(_ dance routine)
