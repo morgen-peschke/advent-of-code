@@ -18,6 +18,7 @@ trait AdventOfCodeDay {
       simpleName.split('$').lastOption.getOrElse(simpleName)
     }
     raw.toList.sliding(2).flatMap {
+      case Nil => Nil
       case h :: t :: Nil if h.isLower && t.isUpper => List(h, ' ')
       case h :: _ => List(h)
     }.mkString + raw.lastOption.fold("")(_.toString)
@@ -65,7 +66,8 @@ object AdventOfCodeDay {
       com.peschke.advent_of_code.day18.Duet,
       com.peschke.advent_of_code.day19.ASeriesOfTubes,
       com.peschke.advent_of_code.day20.ParticleSwarm,
-      com.peschke.advent_of_code.day21.FractalArt
+      com.peschke.advent_of_code.day21.FractalArt,
+      com.peschke.advent_of_code.day22.SporificaVirus
     )
 }
 
