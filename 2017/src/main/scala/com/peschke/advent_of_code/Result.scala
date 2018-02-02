@@ -1,12 +1,18 @@
 package com.peschke.advent_of_code
 
-import cats.Show
+import cats.{Reducible, Show}
+import cats.data.NonEmptyVector
 import cats.syntax.show._
+import cats.instances.int._
 
 sealed trait Result[+A]
+
 object Result {
+
   case object Pass extends Result[Nothing]
+
   case class Fail[+A](actual: A, expected: A) extends Result[A]
+
   case class Abort(exception: Throwable) extends Result[Nothing]
 
   implicit val passShow: Show[Pass.type] = Show.show(_ => "[Pass]")
@@ -14,18 +20,73 @@ object Result {
   implicit def failShow[A](implicit s: Show[A]): Show[Fail[A]] = Show.show { f =>
     val actualShow = f.actual.show
     val expectedShow = f.expected.show
-    if (actualShow.contains("\n") || expectedShow.contains("\n"))
-      s"""[Fail] Returned:
-         |$actualShow
-         |Expected:
-         |$expectedShow
-       """.stripMargin
-    else s"[Fail] returned $actualShow, but expected $expectedShow"
+    val actualShowLines = actualShow.split('\n').toVector
+    val expectedShowLines = expectedShow.split('\n').toVector
+    if ((actualShowLines.length max expectedShowLines.length) == 1) {
+      val comparisonLines = Vector(actualShow, expectedShow)
+        .map(_.toVector)
+        .transpose
+        .map {
+          case Vector(a, b) if a == b => Vector(a, '-', b)
+          case Vector(a, b) => Vector(a, '\u2195', b)
+        }
+        .transpose
+        .map(_.mkString)
+      val preface = Vector(
+        "[Fail] Returned: ",
+        "       ----------",
+        "       Expected: "
+      )
+      (preface zip comparisonLines).mkString("\n")
+    }
+    else {
+      val actualHeader = "[Fail] Returned"
+      val expectedHeader = "Expected"
+      val maxWidthActual =
+        Reducible[NonEmptyVector]
+          .maximum(
+            NonEmptyVector(
+              actualHeader.length,
+              actualShowLines.map(_.length)))
+      val maxWidthExpected =
+        Reducible[NonEmptyVector]
+          .maximum(
+            NonEmptyVector(
+              expectedHeader.length,
+              expectedShowLines.map(_.length)))
+
+      val header =
+        "Returned".padTo(maxWidthActual, ' ') +
+        "  |  " +
+        "Expected".padTo(maxWidthExpected, ' ')
+      val delimiter =
+        ("-" * maxWidthActual) + "--+--" + ("-" * maxWidthExpected)
+
+      val maxLen = actualShowLines.length max expectedShowLines.length
+
+      val body =
+        (actualShowLines.padTo(maxLen, "") zip expectedShowLines.padTo(maxLen, "")).map {
+          case (a, e) =>
+            val sep = if (a == e) "  |  "
+                      else " <+> "
+            a.padTo(maxWidthActual, ' ') + sep + e.padTo(maxWidthExpected, ' ')
+        }
+
+      (header +: delimiter +: body).mkString("\n")
+    }
   }
 
   implicit val abortShow: Show[Abort] = Show.show { a =>
+    import java.io.ByteArrayOutputStream
+    import java.io.PrintStream
+    import java.nio.charset.StandardCharsets
+    val baos = new ByteArrayOutputStream
+    val ps = new PrintStream(baos, true, "utf-8")
+    a.exception.printStackTrace(ps)
+    val stackTrace = new String(baos.toByteArray, StandardCharsets.UTF_8)
+    ps.close()
     s"""|[Fail] threw an exception:
-        |${a.exception}""".stripMargin
+        |$stackTrace""".stripMargin
   }
 
   implicit def resultShow[A](implicit s: Show[A]): Show[Result[A]] = Show.show {
