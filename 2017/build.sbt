@@ -22,6 +22,13 @@ scalacOptions ++= Seq(
   "-Ywarn-value-discard",
   "-Xfatal-warnings")
 
+scalacOptions in (Compile, console) := Seq(
+  "-encoding",
+  "UTF-8",
+  "-feature",
+  "-Ypartial-unification"
+)
+
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % "1.0.0-MF",
   "org.typelevel" %% "kittens" % "1.0.0-RC2",
