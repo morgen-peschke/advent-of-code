@@ -22,58 +22,40 @@ object Result {
     val expectedShow = f.expected.show
     val actualShowLines = actualShow.split('\n').toVector
     val expectedShowLines = expectedShow.split('\n').toVector
-    if ((actualShowLines.length max expectedShowLines.length) == 1) {
-      val comparisonLines = Vector(actualShow, expectedShow)
-        .map(_.toVector)
-        .transpose
-        .map {
-          case Vector(a, b) if a == b => Vector(a, '-', b)
-          case Vector(a, b) => Vector(a, '\u2195', b)
-        }
-        .transpose
-        .map(_.mkString)
-      val preface = Vector(
-        "[Fail] Returned: ",
-        "       ----------",
-        "       Expected: "
-      )
-      (preface zip comparisonLines).mkString("\n")
-    }
-    else {
-      val actualHeader = "[Fail] Returned"
-      val expectedHeader = "Expected"
-      val maxWidthActual =
-        Reducible[NonEmptyVector]
-          .maximum(
-            NonEmptyVector(
-              actualHeader.length,
-              actualShowLines.map(_.length)))
-      val maxWidthExpected =
-        Reducible[NonEmptyVector]
-          .maximum(
-            NonEmptyVector(
-              expectedHeader.length,
-              expectedShowLines.map(_.length)))
 
-      val header =
-        "Returned".padTo(maxWidthActual, ' ') +
-        "  |  " +
-        "Expected".padTo(maxWidthExpected, ' ')
-      val delimiter =
-        ("-" * maxWidthActual) + "--+--" + ("-" * maxWidthExpected)
+    val actualHeader = "[Fail] Returned"
+    val expectedHeader = "Expected"
+    val maxWidthActual =
+      Reducible[NonEmptyVector]
+        .maximum(
+          NonEmptyVector(
+            actualHeader.length,
+            actualShowLines.map(_.length)))
+    val maxWidthExpected =
+      Reducible[NonEmptyVector]
+        .maximum(
+          NonEmptyVector(
+            expectedHeader.length,
+            expectedShowLines.map(_.length)))
 
-      val maxLen = actualShowLines.length max expectedShowLines.length
+    val header =
+      "Returned".padTo(maxWidthActual, ' ') +
+      "  |  " +
+      "Expected".padTo(maxWidthExpected, ' ')
+    val delimiter =
+      ("-" * maxWidthActual) + "--+--" + ("-" * maxWidthExpected)
 
-      val body =
-        (actualShowLines.padTo(maxLen, "") zip expectedShowLines.padTo(maxLen, "")).map {
-          case (a, e) =>
-            val sep = if (a == e) "  |  "
-                      else " <+> "
-            a.padTo(maxWidthActual, ' ') + sep + e.padTo(maxWidthExpected, ' ')
-        }
+    val maxLen = actualShowLines.length max expectedShowLines.length
 
-      (header +: delimiter +: body).mkString("\n")
-    }
+    val body =
+      (actualShowLines.padTo(maxLen, "") zip expectedShowLines.padTo(maxLen, "")).map {
+        case (a, e) =>
+          val sep = if (a == e) "  |  "
+                    else " <+> "
+          a.padTo(maxWidthActual, ' ') + sep + e.padTo(maxWidthExpected, ' ')
+      }
+
+    (header +: delimiter +: body).mkString("\n")
   }
 
   implicit val abortShow: Show[Abort] = Show.show { a =>

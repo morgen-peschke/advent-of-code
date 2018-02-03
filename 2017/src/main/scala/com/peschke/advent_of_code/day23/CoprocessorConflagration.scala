@@ -68,9 +68,6 @@ object CoprocessorConflagration extends AdventOfCodeDay {
   override type P1 = Int
   override type P2 = String
 
-  def unwrappedVectorShow[T](implicit s: Show[T]): Show[Vector[T]] =
-    Show.show(_.map(_.show).mkString("\n"))
-
   implicit val vectorSourceShow: Show[Vector[AST]] = unwrappedVectorShow[AST]
 
   override def runPart1(input: String): Try[P1] = Part1.debug(input)

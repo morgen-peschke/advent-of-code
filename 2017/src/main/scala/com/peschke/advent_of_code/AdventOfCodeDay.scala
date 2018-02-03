@@ -68,7 +68,8 @@ object AdventOfCodeDay {
       com.peschke.advent_of_code.day20.ParticleSwarm,
       com.peschke.advent_of_code.day21.FractalArt,
       com.peschke.advent_of_code.day22.SporificaVirus,
-      com.peschke.advent_of_code.day23.CoprocessorConflagration
+      com.peschke.advent_of_code.day23.CoprocessorConflagration,
+      com.peschke.advent_of_code.day24.ElectromagneticMoat
     )
 }
 

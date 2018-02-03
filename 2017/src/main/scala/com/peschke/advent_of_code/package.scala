@@ -54,4 +54,11 @@ package object advent_of_code {
                                                    |$input""".stripMargin))
       }
   }
+
+  def unwrappedVectorShow[T](implicit s: Show[T]): Show[Vector[T]] =
+    Show.show {
+      case Vector() => "Vector()"
+      case vector =>
+      vector.map("  " + _.show).mkString("Vector {\n","\n", "\n}")
+    }
 }
