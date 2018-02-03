@@ -39,9 +39,9 @@ object Result {
             expectedShowLines.map(_.length)))
 
     val header =
-      "Returned".padTo(maxWidthActual, ' ') +
+      actualHeader.padTo(maxWidthActual, ' ') +
       "  |  " +
-      "Expected".padTo(maxWidthExpected, ' ')
+      expectedHeader.padTo(maxWidthExpected, ' ')
     val delimiter =
       ("-" * maxWidthActual) + "--+--" + ("-" * maxWidthExpected)
 
